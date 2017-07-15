@@ -1,0 +1,132 @@
+{
+    "id": "nl.innovationinmotion.slide",
+    "name": {
+        "en": "Slide Smart Curtains",
+        "nl": "Slide slimme gordijnen"
+    },
+    "version": "0.1.2",
+    "compatibility": "*",
+    "author": {
+        "name": "Chamid Media",
+        "email": "info@chamidmedia.nl"
+    },
+    "images": {
+      "large": "./assets/images/large.jpg",
+      "small": "./assets/images/small.jpg"
+    },
+    "category": "appliances",
+    "description": {
+    	"en": "Control your curtains with Slide through Homey",
+		"nl": "Bestuur je gordijnen met Slide via Homey"
+    },
+    "drivers": [
+      {
+          "id": "slide",
+          "name": {
+              "en": "Slide",
+              "nl": "Slide"
+          },
+          "images": {
+              "large": "drivers/settopbox/assets/images/large.jpg",
+              "small": "drivers/settopbox/assets/images/small.jpg"
+          },
+          "class": "windowcoverings",
+          "capabilities": ["onoff"],
+          "pair": [
+            {
+              "id": "start"
+            },
+            {
+              "id": "list_devices",
+              "template": "list_devices",
+			  "navigation": {
+                    "next": "add_my_devices"
+                }
+            },
+            {
+                "id": "add_my_devices",
+                "template": "add_devices"
+            }
+          ],
+          "settings": [
+                {
+                    "type": "group",
+                    "label": {
+                        "en": "General settings",
+                        "nl": "Algemene instellingen"
+                    },
+                    "children": [
+	                    {
+	                        "id": "ipaddress",
+	                        "type": "text",
+	                        "label": {
+	                            "en": "IP address",
+	                            "nl": "IP adres"
+	                        },
+	                        "value": "0.0.0.0"
+	                    }
+	                ]
+	            }
+	        ]
+      }
+    ],
+    "flow": {
+	    "actions": [
+        {
+            "id": "OpenSlide",
+            "title": {
+                "en": "Open curtains",
+                "nl": "Open gordijnen"
+            },
+            "args": [
+              {
+                "name": "device",
+                "type": "device",
+                "placeholder": {
+                  "en": "Select slide",
+                  "nl": "Selecteer slide"
+                },
+	            "filter": "driver_id=slide"
+              }
+            ]
+        },
+        {
+            "id": "CloseSlide",
+            "title": {
+                "en": "Close curtains",
+                "nl": "Sluit gordijnen"
+            },
+            "args": [
+              {
+                "name": "device",
+                "type": "device",
+                "placeholder": {
+                  "en": "Select slide",
+                  "nl": "Selecteer slide"
+                },
+	            "filter": "driver_id=slide"
+              }
+            ]
+        },
+        {
+            "id": "ImmediateStop",
+            "title": {
+                "en": "Immediate Stop",
+                "nl": "Stop direct"
+            },
+            "args": [
+              {
+                "name": "device",
+                "type": "device",
+                "placeholder": {
+                  "en": "Select slide",
+                  "nl": "Selecteer slide"
+                },
+	            "filter": "driver_id=slide"
+              }
+            ]
+        }
+       
+       ]
+	}
+}
