@@ -73,42 +73,6 @@
     "flow": {
 	    "actions": [
         {
-            "id": "OpenSlide",
-            "title": {
-                "en": "Open curtains",
-                "nl": "Open gordijnen"
-            },
-            "args": [
-              {
-                "name": "device",
-                "type": "device",
-                "placeholder": {
-                  "en": "Select slide",
-                  "nl": "Selecteer slide"
-                },
-	            "filter": "driver_id=slide"
-              }
-            ]
-        },
-        {
-            "id": "CloseSlide",
-            "title": {
-                "en": "Close curtains",
-                "nl": "Sluit gordijnen"
-            },
-            "args": [
-              {
-                "name": "device",
-                "type": "device",
-                "placeholder": {
-                  "en": "Select slide",
-                  "nl": "Selecteer slide"
-                },
-	            "filter": "driver_id=slide"
-              }
-            ]
-        },
-        {
             "id": "ImmediateStop",
             "title": {
                 "en": "Immediate Stop",

@@ -115,7 +115,15 @@ module.exports.capabilities = {
 				
 				function requestCallback(err, res, body) {
 				  	Homey.log(body);
-				  	if (body.success == true) callback (null, true);
+				  	if (typeof body !== "undefined" && typeof body.success !== "undefined") {
+		  	
+					  	if (body.success == true) callback (null, true);
+					  	
+					} else {
+						
+						callback ('Unknown status', false);
+						
+					}
 				}
 				
 			} else {
@@ -124,7 +132,15 @@ module.exports.capabilities = {
 				
 				function requestCallback(err, res, body) {
 				  	Homey.log(body);
-				  	if (body.success == true) callback (null, true);
+				  	if (typeof body !== "undefined" && typeof body.success !== "undefined") {
+		  	
+					  	if (body.success == true) callback (null, true);
+					  	
+					} else {
+						
+						callback ('Unknown status', false);
+						
+					}
 				}
 				
 			}
@@ -144,7 +160,15 @@ Homey.manager('flow').on('action.OpenSlide', function (callback, args) {
 				
 	function requestCallback(err, res, body) {
 	  	Homey.log(body);
-	  	if (body.success == true) callback (null, true);
+	  	if (typeof body !== "undefined" && typeof body.success !== "undefined") {
+		  	
+		  	if (body.success == true) callback (null, true);
+		  	
+		} else {
+			
+			callback ('Unknown status', false);
+			
+		}
 	}
 				
 });
@@ -155,7 +179,15 @@ Homey.manager('flow').on('action.CloseSlide', function (callback, args) {
 				
 	function requestCallback(err, res, body) {
 	  	Homey.log(body);
-	  	if (body.success == true) callback (null, true);
+	  	if (typeof body !== "undefined" && typeof body.success !== "undefined") {
+		  	
+		  	if (body.success == true) callback (null, true);
+		  	
+		} else {
+			
+			callback ('Unknown status', false);
+			
+		}
 	}
 
 });
@@ -166,7 +198,15 @@ Homey.manager('flow').on('action.ImmediateStop', function (callback, args) {
 				
 	function requestCallback(err, res, body) {
 	  	Homey.log(body);
-	  	if (body.success == true) callback (null, true);
+	  	if (typeof body !== "undefined" && typeof body.success !== "undefined") {
+		  	
+		  	if (body.success == true) callback (null, true);
+		  	
+		} else {
+			
+			callback ('Unknown status', false);
+			
+		}
 	}
 
 });
