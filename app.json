@@ -4,12 +4,21 @@
         "en": "Slide Smart Curtains",
         "nl": "Slide slimme gordijnen"
     },
+    "sdk": 2,
     "version": "0.0.1",
     "compatibility": "*",
     "author": {
         "name": "Chamid Media",
         "email": "info@chamidmedia.nl"
     },
+    "contributing": {
+	    "donate": {
+	        "paypal": {
+	            "email": "info@chamidmedia.nl",
+	            "currency": "EUR"
+	        }
+	    }
+	},
     "images": {
       "large": "./assets/images/large.jpg",
       "small": "./assets/images/small.jpg"
@@ -31,22 +40,46 @@
               "small": "drivers/settopbox/assets/images/small.jpg"
           },
           "class": "windowcoverings",
-          "capabilities": ["onoff"],
-          "pair": [
-            {
-              "id": "start"
-            },
-            {
-              "id": "list_devices",
-              "template": "list_devices",
-			  "navigation": {
-                    "next": "add_my_devices"
+          "capabilities": ["onoff", "dim"],
+          "capabilitiesOptions": {
+	          "dim": {
+		          "title": {
+			          "en": "Drag to close",
+			          "nl": "Schuif om te sluiten"
+		          }
+	          }
+	      },
+	      "mobile": {
+            "components": [
+                {
+                    "id": "icon",
+                    "capabilities": [ "onoff" ]
+                },
+                {
+                    "id": "slider",
+                    "capabilities": [ "dim" ],
+                    "options": {
+                        "showTitle": true
+                    }
+                },
+                {
+                    "id": "toggle",
+                    "capabilities": [ "onoff" ]
                 }
-            },
-            {
-                "id": "add_my_devices",
-                "template": "add_devices"
-            }
+				]
+		  },
+          "pair": [
+                {
+                    "id": "list_devices",
+                    "template": "list_devices",
+                    "navigation": {
+                        "next": "add_devices"
+                    }
+                },
+                {
+                    "id": "add_devices",
+                    "template": "add_devices"
+                }
           ],
           "settings": [
                 {
@@ -57,13 +90,13 @@
                     },
                     "children": [
 	                    {
-	                        "id": "ipaddress",
+	                        "id": "hostname",
 	                        "type": "text",
 	                        "label": {
-	                            "en": "IP address",
-	                            "nl": "IP adres"
+	                            "en": "Host name",
+	                            "nl": "Host name"
 	                        },
-	                        "value": "0.0.0.0"
+	                        "value": "slide_12345"
 	                    }
 	                ]
 	            }

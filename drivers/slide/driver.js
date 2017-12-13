@@ -1,5 +1,29 @@
 "use strict";
 
+'use strict';
+
+const Homey = require('homey');
+
+class SlideDriver extends Homey.Driver {
+
+    onPairListDevices( data, callback ){
+
+        callback( null, [
+            {
+                name: 'Foo Device',
+                data: {
+                    id: 'foo'
+                }
+            }
+        ]);
+
+    }
+
+}
+
+module.exports = SlideDriver;
+
+/*
 var request = require('request');
 var tempIP = '';
 var devices = {};
@@ -210,3 +234,4 @@ Homey.manager('flow').on('action.ImmediateStop', function (callback, args) {
 	}
 
 });
+*/
