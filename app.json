@@ -40,31 +40,23 @@
               "small": "drivers/settopbox/assets/images/small.jpg"
           },
           "class": "windowcoverings",
-          "capabilities": ["onoff", "dim"],
+          "capabilities": ["dim"],
           "capabilitiesOptions": {
 	          "dim": {
 		          "title": {
-			          "en": "Drag to close",
-			          "nl": "Schuif om te sluiten"
+			          "en": "Drag right to close",
+			          "nl": "Schuif rechts om te sluiten"
 		          }
 	          }
 	      },
 	      "mobile": {
             "components": [
                 {
-                    "id": "icon",
-                    "capabilities": [ "onoff" ]
-                },
-                {
                     "id": "slider",
                     "capabilities": [ "dim" ],
                     "options": {
                         "showTitle": true
                     }
-                },
-                {
-                    "id": "toggle",
-                    "capabilities": [ "onoff" ]
                 }
 				]
 		  },
@@ -80,27 +72,7 @@
                     "id": "add_devices",
                     "template": "add_devices"
                 }
-          ],
-          "settings": [
-                {
-                    "type": "group",
-                    "label": {
-                        "en": "General settings",
-                        "nl": "Algemene instellingen"
-                    },
-                    "children": [
-	                    {
-	                        "id": "hostname",
-	                        "type": "text",
-	                        "label": {
-	                            "en": "Host name",
-	                            "nl": "Host name"
-	                        },
-	                        "value": "slide_12345"
-	                    }
-	                ]
-	            }
-	        ]
+          ]
       }
     ],
     "flow": {
