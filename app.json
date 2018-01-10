@@ -36,11 +36,11 @@
               "nl": "Slide"
           },
           "images": {
-              "large": "drivers/settopbox/assets/images/large.jpg",
-              "small": "drivers/settopbox/assets/images/small.jpg"
+              "large": "drivers/slide/assets/images/large.jpg",
+              "small": "drivers/slide/assets/images/small.jpg"
           },
           "class": "windowcoverings",
-          "capabilities": ["dim"],
+          "capabilities": ["dim", "windowcoverings_state"],
           "capabilitiesOptions": {
 	          "dim": {
 		          "title": {

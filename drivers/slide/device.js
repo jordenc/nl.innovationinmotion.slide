@@ -14,6 +14,8 @@ class SlideDevice extends Homey.Device {
         // register a capability listener
         this.registerCapabilityListener('dim', this.onCapabilityDim.bind(this));
         
+        this.registerCapabilityLister('windowcoverings_state', this.onCapabilityWindowcoveringsState.bind(this));
+        
         var device_data = this.getData();
 
 		let ImmediateStopAction = new Homey.FlowCardAction('ImmediateStop');
@@ -29,7 +31,7 @@ class SlideDevice extends Homey.Device {
 			        
 			        var result = JSON.parse(body);
 			            
-			        if (!error && response.statusCode === 200) {
+			        if (response.statusCode === 200) {
 			            
 			            return Promise.resolve(true);
 			            
@@ -44,7 +46,10 @@ class SlideDevice extends Homey.Device {
 				
 			});
         
-        /* ERROR: this.setCapabilityValue is not a function
+        /* ERROR: this.setCapabilityValue is not a function */
+        
+        var thisdevice = this;
+        
         request({
 			url: 'http://' + device_data.host + "/rpc/Slide.GetInfo",
 			method: "GET"
@@ -53,11 +58,12 @@ class SlideDevice extends Homey.Device {
 	        
 	        var result = JSON.parse(body);
 	            
-	        if (!error && response.statusCode === 200) {
+	        if (response.statusCode === 200) {
 	            
 	            if (result.pos < 0) result.pos = 0;
 	            
-	            this.setCapabilityValue ("dim", result.pos);
+	            console.log("INIT dim status naar " + result.pos);
+	            thisdevice.setCapabilityValue ("dim", result.pos);
 	            
 	        }
 	        else {
@@ -67,7 +73,6 @@ class SlideDevice extends Homey.Device {
 	            console.log("response.statusText: " + response.statusText)
 	        }
 	    })
-        */
         
     }
 
@@ -104,9 +109,7 @@ class SlideDevice extends Homey.Device {
 	 		var requestData = {"pos":  value}
 	 		var device_data = this.getData();
 	 		
-	 		//var requestData = '{"pos":  "' + value + '"}';
-	 		
-	 		this.log("requestData = " + requestData);
+	 		this.log("requestData = " + JSON.stringify(requestData));
 	 		
 	    	request({
 			    url: 'http://' + device_data.host + '/rpc/Slide.SetPos',
@@ -114,11 +117,9 @@ class SlideDevice extends Homey.Device {
 			    json: requestData
 			},
 			function (error, response, body) {
-		        if (!error && response.statusCode === 200) {
+		        if (response.statusCode === 200) {
 		            
-		            console.log("error: " + error)
 		            console.log("response.statusCode: " + response.statusCode)
-		            console.log("response.statusText: " + response.statusText)
 		            console.log("body = " + JSON.stringify (body));
 		            
 		            if (body.response == "success") {
@@ -141,6 +142,12 @@ class SlideDevice extends Homey.Device {
 		    })
 			
 	    }
+	    
+    }
+    
+    onCapabilityWindowcoveringsState (value, opts, callback) {
+	    
+	    this.log ("windowcoverings_state capability");
 	    
     }
 
