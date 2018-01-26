@@ -14,7 +14,7 @@ class SlideDevice extends Homey.Device {
         // register a capability listener
         this.registerCapabilityListener('dim', this.onCapabilityDim.bind(this));
         
-        this.registerCapabilityLister('windowcoverings_state', this.onCapabilityWindowcoveringsState.bind(this));
+        this.registerCapabilityListener('windowcoverings_state', this.onCapabilityWindowcoveringsState.bind(this));
         
         var device_data = this.getData();
 
