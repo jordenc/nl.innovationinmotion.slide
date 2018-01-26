@@ -149,6 +149,11 @@ class SlideDevice extends Homey.Device {
 	    
 	    this.log ("windowcoverings_state capability");
 	    
+	     this.log("windowcoverings_state opts = " + JSON.stringify (opts));
+	    
+	 	this.log("windowcoverings_state callback = " + JSON.stringify (callback));
+	    
+	    this.log ("windowcoverings_state DIM value = " + JSON.stringify (value));
     }
 
 }
