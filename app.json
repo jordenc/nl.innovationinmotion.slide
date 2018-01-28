@@ -40,7 +40,7 @@
               "small": "drivers/slide/assets/images/small.jpg"
           },
           "class": "windowcoverings",
-          "capabilities": ["dim", "windowcoverings_state"],
+          "capabilities": ["dim"],
           "capabilitiesOptions": {
 	          "dim": {
 		          "title": {

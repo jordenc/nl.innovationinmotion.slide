@@ -14,7 +14,7 @@ class SlideDevice extends Homey.Device {
         // register a capability listener
         this.registerCapabilityListener('dim', this.onCapabilityDim.bind(this));
         
-        this.registerCapabilityListener('windowcoverings_state', this.onCapabilityWindowcoveringsState.bind(this));
+        this.registerCapabilityListener('onoff', this.onCapabilityOnOff.bind(this));
         
         var device_data = this.getData();
 
@@ -145,15 +145,56 @@ class SlideDevice extends Homey.Device {
 	    
     }
     
-    onCapabilityWindowcoveringsState (value, opts, callback) {
+    onCapabilityOnOff (value, opts, callback) {
 	    
 	    this.log ("windowcoverings_state capability");
 	    
-	     this.log("windowcoverings_state opts = " + JSON.stringify (opts));
-	    
-	 	this.log("windowcoverings_state callback = " + JSON.stringify (callback));
-	    
 	    this.log ("windowcoverings_state DIM value = " + JSON.stringify (value));
+	    
+	    var device_data = this.getData();
+
+		if (value) {
+			
+			var requestData = {"pos":  0.00}
+			
+		} else {
+			
+			var requestData = {"pos":  1.00}
+			
+		}
+		
+		this.log("requestData = " + JSON.stringify(requestData));
+	 		
+    	request({
+		    url: 'http://' + device_data.host + '/rpc/Slide.SetPos',
+		    method: "POST",
+		    json: requestData
+		},
+		function (error, response, body) {
+	        if (response.statusCode === 200) {
+	            
+	            console.log("response.statusCode: " + response.statusCode)
+	            console.log("body = " + JSON.stringify (body));
+	            
+	            if (body.response == "success") {
+		         
+		         	callback (null, true);
+		            
+		        } else {
+			     
+			     	callback (body.response, false);
+			        
+			    }
+	            
+	        }
+	        else {
+	
+	            console.log("error: " + error)
+	            console.log("response.statusCode: " + response.statusCode)
+	            console.log("response.statusText: " + response.statusText)
+	        }
+	    })
+	    
     }
 
 }
