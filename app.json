@@ -1,8 +1,8 @@
 {
     "id": "nl.innovationinmotion.slide",
     "name": {
-        "en": "Slide Smart Curtains",
-        "nl": "Slide slimme gordijnen"
+        "en": "Slide",
+        "nl": "Slide"
     },
     "sdk": 2,
     "version": "0.0.1",
@@ -23,6 +23,10 @@
       "large": "./assets/images/large.jpg",
       "small": "./assets/images/small.jpg"
     },
+    "tags": {
+        "en": [ "Curtains" ],
+        "nl": [ "Gordijnen" ]
+    }
     "category": "appliances",
     "description": {
     	"en": "Control your curtains with Slide through Homey",
