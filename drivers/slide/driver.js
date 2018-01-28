@@ -1,7 +1,7 @@
 "use strict";
 
 const Homey = require('homey');
-let mdns 	= require('node-mdns-js');
+let mdns 	= require('mdns-js');
 let request	= require('request');
 let devices = [];
 

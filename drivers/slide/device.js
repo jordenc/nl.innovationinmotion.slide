@@ -14,7 +14,7 @@ class SlideDevice extends Homey.Device {
         // register a capability listener
         this.registerCapabilityListener('dim', this.onCapabilityDim.bind(this));
         
-        this.registerCapabilityListener('onoff', this.onCapabilityOnOff.bind(this));
+        //this.registerCapabilityListener('onoff', this.onCapabilityOnOff.bind(this));
         
         var device_data = this.getData();
 
@@ -46,33 +46,9 @@ class SlideDevice extends Homey.Device {
 				
 			});
         
-        /* ERROR: this.setCapabilityValue is not a function */
-        
-        var thisdevice = this;
-        
-        request({
-			url: 'http://' + device_data.host + "/rpc/Slide.GetInfo",
-			method: "GET"
-		},
-		function (error, response, body) {
-	        
-	        var result = JSON.parse(body);
-	            
-	        if (response.statusCode === 200) {
-	            
-	            if (result.pos < 0) result.pos = 0;
-	            
-	            console.log("INIT dim status naar " + result.pos);
-	            thisdevice.setCapabilityValue ("dim", result.pos);
-	            
-	        }
-	        else {
-	
-	            console.log("error: " + error)
-	            console.log("response.statusCode: " + response.statusCode)
-	            console.log("response.statusText: " + response.statusText)
-	        }
-	    })
+        //Poll the device every 20 seconds
+	    this._StatusInterval = setInterval(this.check_status.bind(this), 20000);
+		this.check_status();
         
     }
 
@@ -145,6 +121,41 @@ class SlideDevice extends Homey.Device {
 	    
     }
     
+    check_status () {
+	    
+	    console.log ("check status...");
+	    
+	    var device_data = this.getData();
+	    
+	    var thisdevice = this;
+	    
+	    request({
+			url: 'http://' + device_data.host + "/rpc/Slide.GetInfo",
+			method: "GET"
+		},
+		function (error, response, body) {
+	        
+	        var result = JSON.parse(body);
+	            
+	        if (response.statusCode === 200) {
+	            
+	            if (result.pos < 0) result.pos = 0;
+	            
+	            console.log("UPDATE dim status naar " + result.pos);
+	            thisdevice.setCapabilityValue ("dim", result.pos);
+	            
+	        }
+	        else {
+	
+	            console.log("error: " + error)
+	            console.log("response.statusCode: " + response.statusCode)
+	            console.log("response.statusText: " + response.statusText)
+	        }
+	    })
+	    
+    }
+    
+    /*
     onCapabilityOnOff (value, opts, callback) {
 	    
 	    this.log ("windowcoverings_state capability");
@@ -196,6 +207,7 @@ class SlideDevice extends Homey.Device {
 	    })
 	    
     }
+    */
 
 }
 
