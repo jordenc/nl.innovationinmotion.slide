@@ -7,7 +7,7 @@ Control your curtains with Slide by Innovation In Motion (https://innovationinmo
 Install your Slide device(s) using the official app by Innovation in Motion, on your smartphone. Connect them to the Wifi. Please note that they have to be in the same network as Homey.
 
 Enables the following cards to use in your flows:
-- [Trigger] Position changed #level
+- [Trigger] Position changed #level (From fully opened: 0.00 to fully closed: 1.00)
 - [Action] Set position
 - [Action] Immediate stop
 
