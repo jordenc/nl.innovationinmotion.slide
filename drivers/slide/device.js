@@ -29,14 +29,11 @@ class SlideDevice extends Homey.Device {
 				},
 				function (error, response, body) {
 			        
-			        var result = JSON.parse(body);
-			            
 			        if (response.statusCode === 200) {
 			            
 			            return Promise.resolve(true);
 			            
-			        }
-			        else {
+			        } else {
 			
 			            console.log("error: " + error)
 			            console.log("response.statusCode: " + response.statusCode)
