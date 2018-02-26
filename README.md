@@ -15,5 +15,9 @@ Use at your own risk, I accept no responsibility for any damages caused by using
 
 # Changelog
 
+**Version 0.2.0**
+- Better error detection
+- Better scanning
+
 **Version 0.1.0:**
 - First release

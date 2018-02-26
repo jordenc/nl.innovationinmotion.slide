@@ -132,17 +132,24 @@ class SlideDevice extends Homey.Device {
 		},
 		function (error, response, body) {
 	        
-	        var result = JSON.parse(body);
-	            
 	        if (response.statusCode === 200) {
+		        
+		       	try {
+		        
+			   		var result = JSON.parse(body);
 	            
-	            if (result.pos < 0) result.pos = 0;
+		            if (result.pos < 0) result.pos = 0;
+		            
+		            console.log("UPDATE dim status naar " + result.pos);
+		            thisdevice.setCapabilityValue ("dim", result.pos);
+		        
+		        } catch (e) {
+			        
+			        console.log ("Error while retrieving status: " + e);
+			        
+		        }
 	            
-	            console.log("UPDATE dim status naar " + result.pos);
-	            thisdevice.setCapabilityValue ("dim", result.pos);
-	            
-	        }
-	        else {
+	        } else {
 	
 	            console.log("error: " + error)
 	            console.log("response.statusCode: " + response.statusCode)
