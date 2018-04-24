@@ -29,22 +29,26 @@ class SlideDevice extends Homey.Device {
 				},
 				function (error, response, body) {
 			        
-			        if (response.statusCode === 200) {
-			            
-			            return Promise.resolve(true);
-			            
-			        } else {
-			
-			            console.log("error: " + error)
-			            console.log("response.statusCode: " + response.statusCode)
-			            console.log("response.statusText: " + response.statusText)
-			        }
+			        if (typeof response.statusCode !== 'undefined') {
+				        
+				        if (response.statusCode === 200) {
+				            
+				            return Promise.resolve(true);
+				            
+				        } else {
+				
+				            console.log("error: " + error)
+				            console.log("response.statusCode: " + response.statusCode)
+				            console.log("response.statusText: " + response.statusText)
+				        }
+				        
+				    }
 			    })
 				
 			});
         
-        //Poll the device every 20 seconds
-	    this._StatusInterval = setInterval(this.check_status.bind(this), 20000);
+        //Poll the device every 30 seconds
+	    this._StatusInterval = setInterval(this.check_status.bind(this), 30000);
 		this.check_status();
         
     }
@@ -90,28 +94,33 @@ class SlideDevice extends Homey.Device {
 			    json: requestData
 			},
 			function (error, response, body) {
-		        if (response.statusCode === 200) {
-		            
-		            console.log("response.statusCode: " + response.statusCode)
-		            console.log("body = " + JSON.stringify (body));
-		            
-		            if (body.response == "success") {
-			         
-			         	callback (null, true);
+				
+				if (typeof response.statusCode !== 'undefined') {
+					
+			        if (response.statusCode === 200) {
 			            
-			        } else {
-				     
-				     	callback (body.response, false);
-				        
-				    }
-		            
-		        }
-		        else {
-		
-		            console.log("error: " + error)
-		            console.log("response.statusCode: " + response.statusCode)
-		            console.log("response.statusText: " + response.statusText)
-		        }
+			            console.log("response.statusCode: " + response.statusCode)
+			            console.log("body = " + JSON.stringify (body));
+			            
+			            if (body.response == "success") {
+				         
+				         	callback (null, true);
+				            
+				        } else {
+					     
+					     	callback (body.response, false);
+					        
+					    }
+			            
+			        }
+			        else {
+			
+			            console.log("error: " + error)
+			            console.log("response.statusCode: " + response.statusCode)
+			            console.log("response.statusText: " + response.statusText)
+			        }
+			        
+			    }
 		    })
 			
 	    }
@@ -132,28 +141,32 @@ class SlideDevice extends Homey.Device {
 		},
 		function (error, response, body) {
 	        
-	        if (response.statusCode === 200) {
+	        if (typeof response.statusCode !== 'undefined') {
 		        
-		       	try {
-		        
-			   		var result = JSON.parse(body);
-	            
-		            if (result.pos < 0) result.pos = 0;
+		        if (response.statusCode === 200) {
+			        
+			       	try {
+			        
+				   		var result = JSON.parse(body);
 		            
-		            console.log("UPDATE dim status naar " + result.pos);
-		            thisdevice.setCapabilityValue ("dim", result.pos);
-		        
-		        } catch (e) {
+			            if (result.pos < 0) result.pos = 0;
+			            
+			            console.log("UPDATE dim status naar " + result.pos);
+			            thisdevice.setCapabilityValue ("dim", result.pos);
 			        
-			        console.log ("Error while retrieving status: " + e);
-			        
+			        } catch (e) {
+				        
+				        console.log ("Error while retrieving status: " + e);
+				        
+			        }
+		            
+		        } else {
+		
+		            console.log("error: " + error)
+		            console.log("response.statusCode: " + response.statusCode)
+		            console.log("response.statusText: " + response.statusText)
 		        }
-	            
-	        } else {
-	
-	            console.log("error: " + error)
-	            console.log("response.statusCode: " + response.statusCode)
-	            console.log("response.statusText: " + response.statusText)
+	        
 	        }
 	    })
 	    
