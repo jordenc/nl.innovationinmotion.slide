@@ -15,6 +15,9 @@ Use at your own risk, I accept no responsibility for any damages caused by using
 
 # Changelog
 
+**Version 0.2.2**
+- Fixed a small bug
+
 **Version 0.2.1**
 - Fixed a crash
 - Changed polling from every 20 to every 30 seconds

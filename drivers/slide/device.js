@@ -29,7 +29,7 @@ class SlideDevice extends Homey.Device {
 				},
 				function (error, response, body) {
 			        
-			        if (typeof response.statusCode !== 'undefined') {
+			        if (typeof response !== 'undefined' && typeof response.statusCode !== 'undefined') {
 				        
 				        if (response.statusCode === 200) {
 				            
@@ -95,7 +95,7 @@ class SlideDevice extends Homey.Device {
 			},
 			function (error, response, body) {
 				
-				if (typeof response.statusCode !== 'undefined') {
+				if (typeof response !== 'undefined' && typeof response.statusCode !== 'undefined') {
 					
 			        if (response.statusCode === 200) {
 			            
@@ -141,7 +141,7 @@ class SlideDevice extends Homey.Device {
 		},
 		function (error, response, body) {
 	        
-	        if (typeof response.statusCode !== 'undefined') {
+	        if (typeof response !== 'undefined' && typeof response.statusCode !== 'undefined') {
 		        
 		        if (response.statusCode === 200) {
 			        
