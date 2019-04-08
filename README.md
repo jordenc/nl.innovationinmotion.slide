@@ -15,6 +15,9 @@ Use at your own risk, I accept no responsibility for any damages caused by using
 
 # Changelog
 
+**Version 0.3.0**
+- New Cloud API setup for final version.
+
 **Version 0.2.2**
 - Fixed a small bug
 

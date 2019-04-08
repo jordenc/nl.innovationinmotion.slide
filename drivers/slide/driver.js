@@ -1,78 +1,132 @@
 "use strict";
 
 const Homey = require('homey');
-let mdns 	= require('mdns-js');
 let request	= require('request');
 let devices = [];
 
 class SlideDriver extends Homey.Driver {
-
-    onPairListDevices( data, callback ){
-
-	    var browser = mdns.createBrowser(mdns.tcp('slide'));
-	    
-	    browser.on('ready', function onReady() {
-		  console.log('browser is ready');
-		  browser.discover();
-		});
-		
-		
-		browser.on('update', function onUpdate(data) {
-			
-			console.log('data:', data);
-
-			if (data.fullname.substr(0, 5) == "slide") {
-				  
-				request({
-					url: 'http://' + data.host + "/rpc/Slide.GetInfo",
-					method: "GET"
-				},
-					function (error, response, body) {
-				        
-				        var result = JSON.parse(body);
-				            
-				        if (!error && response.statusCode === 200) {
-				            
-				             var device = {
-								  name: result.device_name,
-								  data: {
-									  id: data.fullname,
-									  ip: data.addresses,
-									  mac: result.mac,
-									  host: data.host,
-									  curtain_type: result.curtain_type,
-									  pos: result.pos
-								  }
-							  }
+	
+	onPair( socket ) {
+      
+	      socket.on('login', ( data, callback ) => {
+		      
+		      console.log ("mydata = " + JSON.stringify (data));
+		      
+				var formData = {
+					'email':		data.username, 
+					'password': 	data.password
+				};
+	          
+				  request(
+					  {
+					  	method: "post",
+					  	url: 'https://api.goslide.io/api/auth/login',
+					    body: formData,
+					    headers: {  
+							"content-type": "application/json",
+						},
+					  	json: true
+					  },
+					  function (error, response, body) {
+						  
+						  console.log ("result = " + response.statusCode + " & body = " + JSON.stringify (body));
+						  
+						  if (!error && response.statusCode == 200) {
 							  
-							  devices.push(device);
-				            
-				        }
-				        else {
-				
-				            console.log("error: " + error)
-				            console.log("response.statusCode: " + response.statusCode)
-				            console.log("response.statusText: " + response.statusText)
-				        }
-				    })
-		    } else {
-			    
-			    console.log (data.fullname + " is not a Slide device");
-			    
-		    }
-		    
-		});
-		
-		//stop after timeout
-		setTimeout(function onTimeout() {
-			browser.stop();
-			console.log ("--TIME OUT--");
-			console.log ("DEVICES = " + JSON.stringify (devices));
-			callback (null, devices);
-		}, 5000);
-	    
-    }
+							  var token = body.access_token;
+							  
+							  Homey.ManagerSettings.set('token', token);
+							  
+							  request(
+								  {
+								  	method: "get",
+								  	url: 'https://api.goslide.io/api/slides/overview',
+								    headers: {  
+										"content-type": "application/json",
+										"Authorization": 'Bearer ' + token
+									},
+								  	json: true
+								  },
+								  function (error, response, body) {
+									  
+									  console.log ("result = " + response.statusCode + " & body = " + JSON.stringify (body));
+									  
+									  if (!error && response.statusCode == 200) {
+										 
+										body.slides.forEach (function(device) {
+											
+											devices.push(
+											{
+												data: {
+													id			: device.device_id,
+													numid		: device.id,
+													slide_setup	: device.slide_setup,
+													curtain_type	: device.curtain_type,
+													position		: device.device_info.pos,
+													zone_id		: device.zone_id,
+													touch_go		: device.touch_go,
+													
+												},
+												name: device.device_name
+											}
+											
+											);
+											
+										});
+										
+										console.log ("new devices = " + JSON.stringify (devices));
+										
+										callback( null, devices );
+										  
+									} else {
+										  
+										  callback (body.error);
+										  
+									}
+								  }
+								);
+							  
+						} else {
+							  
+							  callback (body.error);
+							  
+						}
+					  }
+					);
+
+	          /*
+	          this.login({ username, password })
+	            .then(credentialsAreValid => {
+	              if( credentialsAreValid === true ) {
+	                callback( null, true );
+	              } else if( credentialsAreValid === false ) {
+	                callback( null, false );
+	              } else {
+	                throw new Error('Invalid Response');
+	              }
+	            })
+	            .catch(err => {
+	              callback(err);
+	            });
+	            */
+	      });
+	
+	    socket.on('list_devices', function( data, callback ) {
+		      
+	      // emit when devices are still being searched
+	      socket.emit('list_devices', devices );
+	
+	      // fire the callback when searching is done
+	      callback( null, devices );
+	
+	      // when no devices are found, return an empty array
+	      // callback( null, [] );
+	
+	      // or fire a callback with Error to show that instead
+	      // callback( new Error('Something bad has occured!') );
+	    });
+	  }
 
 }
-
+	  
 module.exports = SlideDriver;

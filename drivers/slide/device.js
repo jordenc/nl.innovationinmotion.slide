@@ -23,33 +23,39 @@ class SlideDevice extends Homey.Device {
 			.register()
 			.registerRunListener((args, state) => {
 				
-				request({
-					url: 'http://' + device_data.host + "/rpc/Slide.Stop",
-					method: "GET"
-				},
-				function (error, response, body) {
-			        
-			        if (typeof response !== 'undefined' && typeof response.statusCode !== 'undefined') {
-				        
-				        if (response.statusCode === 200) {
-				            
-				            return Promise.resolve(true);
-				            
-				        } else {
-				
-				            console.log("error: " + error)
-				            console.log("response.statusCode: " + response.statusCode)
-				            console.log("response.statusText: " + response.statusText)
-				        }
-				        
-				    }
-			    })
+				var token = Homey.ManagerSettings.get('token');
+			  
+				request(
+				  {
+				  	method: "post",
+				  	url: 'https://api.goslide.io/api/slide/' + args.device.id + '/stop',
+				    headers: {  
+						"content-type": "application/json",
+						"Authorization": 'Bearer ' + token
+					},
+				  	json: true
+				  },
+				  function (error, response, body) {
+					  
+					  console.log ("result = " + response.statusCode + " & body = " + JSON.stringify (body));
+					  
+					  if (!error && response.statusCode == 200) {
+						
+						callback( null, true );
+						  
+					} else {
+						  
+						  callback (body.error);
+						  
+					}
+				  }
+				);
 				
 			});
         
         //Poll the device every 30 seconds
-	    this._StatusInterval = setInterval(this.check_status.bind(this), 30000);
-		this.check_status();
+	    //this._StatusInterval = setInterval(this.check_status.bind(this), 30000);
+		//this.check_status();
         
     }
 
@@ -88,10 +94,15 @@ class SlideDevice extends Homey.Device {
 	 		
 	 		this.log("requestData = " + JSON.stringify(requestData));
 	 		
-	    	request({
-			    url: 'http://' + device_data.host + '/rpc/Slide.SetPos',
+	    		request({
+			    url: 'https://api.goslide.io/api/slide/' + args.device.id + '/position',
 			    method: "POST",
-			    json: requestData
+			    headers: {  
+					"content-type": "application/json",
+					"Authorization": 'Bearer ' + token
+				},
+			    json: true,
+			    body: requestData
 			},
 			function (error, response, body) {
 				
@@ -171,60 +182,6 @@ class SlideDevice extends Homey.Device {
 	    })
 	    
     }
-    
-    /*
-    onCapabilityOnOff (value, opts, callback) {
-	    
-	    this.log ("windowcoverings_state capability");
-	    
-	    this.log ("windowcoverings_state DIM value = " + JSON.stringify (value));
-	    
-	    var device_data = this.getData();
-
-		if (value) {
-			
-			var requestData = {"pos":  0.00}
-			
-		} else {
-			
-			var requestData = {"pos":  1.00}
-			
-		}
-		
-		this.log("requestData = " + JSON.stringify(requestData));
-	 		
-    	request({
-		    url: 'http://' + device_data.host + '/rpc/Slide.SetPos',
-		    method: "POST",
-		    json: requestData
-		},
-		function (error, response, body) {
-	        if (response.statusCode === 200) {
-	            
-	            console.log("response.statusCode: " + response.statusCode)
-	            console.log("body = " + JSON.stringify (body));
-	            
-	            if (body.response == "success") {
-		         
-		         	callback (null, true);
-		            
-		        } else {
-			     
-			     	callback (body.response, false);
-			        
-			    }
-	            
-	        }
-	        else {
-	
-	            console.log("error: " + error)
-	            console.log("response.statusCode: " + response.statusCode)
-	            console.log("response.statusText: " + response.statusText)
-	        }
-	    })
-	    
-    }
-    */
 
 }
 

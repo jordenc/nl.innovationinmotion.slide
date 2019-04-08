@@ -5,7 +5,7 @@
         "nl": "Slide"
     },
     "sdk": 2,
-    "version": "0.2.2",
+    "version": "0.3.0",
     "compatibility": "*",
     "author": {
         "name": "Chamid Media",
@@ -66,6 +66,16 @@
 				]
 		  },
           "pair": [
+	            {
+		          "id": "login",
+		          "template": "login_credentials",
+		          "options": {
+		          	"logo": "assets/images/small.jpg"
+		          },
+                   "navigation": {
+                        "next": "list_devices"
+                   }
+	            },
                 {
                     "id": "list_devices",
                     "template": "list_devices",
