@@ -69,7 +69,9 @@
 	            {
 		          "id": "login",
 		          "template": "login_credentials",
-		          "logo": "assets/images/small.jpg",
+		          "options": {
+			          "logo": "small.jpg"
+		          },
 		          "navigation": {
                         "next": "list_devices"
                    }
