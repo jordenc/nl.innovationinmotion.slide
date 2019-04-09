@@ -116,6 +116,7 @@ class SlideDriver extends Homey.Driver {
 		  console.log ("Driver initialisation done");
 		  
 		  this._StatusInterval = setInterval(this.checkToken.bind(this), 1000 * 60 * 60 * 24);
+		  this.checkToken();
 		  
 	  }
 	  
