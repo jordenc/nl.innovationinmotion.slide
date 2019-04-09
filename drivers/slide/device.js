@@ -11,10 +11,7 @@ class SlideDevice extends Homey.Device {
         this.log('name:', this.getName());
         this.log('class:', this.getClass());
 
-        // register a capability listener
         this.registerCapabilityListener('dim', this.onCapabilityDim.bind(this));
-        
-        //this.registerCapabilityListener('onoff', this.onCapabilityOnOff.bind(this));
         
         var device_data = this.getData();
 
@@ -56,6 +53,10 @@ class SlideDevice extends Homey.Device {
 				
 			});
         
+        //Poll the device every 30 seconds
+	    this._StatusInterval = setInterval(this.check_status.bind(this), 30000);
+		this.check_status();
+		
     }
 
     // this method is called when the Device is added
@@ -142,17 +143,27 @@ class SlideDevice extends Homey.Device {
     
     check_status () {
 	    
-	    console.log ("check status...");
-	    
 	    var device_data = this.getData();
+	    var token = Homey.ManagerSettings.get('token');
+	    
+	    console.log ("check status of " + device_data.numid + "...");
+	    
 	    
 	    var thisdevice = this;
 	    
 	    request({
-			url: 'http://' + device_data.host + "/rpc/Slide.GetInfo",
-			method: "GET"
+			url: 'https://api.goslide.io/api/slide/' + device_data.numid + "/info",
+			method: "get",
+			headers: {  
+				"content-type": "application/json",
+				"Authorization": 'Bearer ' + token
+			},
+			json: true
 		},
 		function (error, response, body) {
+			
+			console.log("response.statusCode: " + response.statusCode)
+			console.log("body = " + JSON.stringify (body));
 	        
 	        if (typeof response !== 'undefined' && typeof response.statusCode !== 'undefined') {
 		        
@@ -160,12 +171,12 @@ class SlideDevice extends Homey.Device {
 			        
 			       	try {
 			        
-				   		var result = JSON.parse(body);
+				   		//var result = JSON.parse(body);
 		            
-			            if (result.pos < 0) result.pos = 0;
+			            if (body.data.pos < 0) body.data.pos = 0;
 			            
-			            console.log("UPDATE dim status naar " + result.pos);
-			            thisdevice.setCapabilityValue ("dim", result.pos);
+			            console.log("UPDATE dim status naar " + body.data.pos);
+			            thisdevice.setCapabilityValue ("dim", body.data.pos);
 			        
 			        } catch (e) {
 				        
