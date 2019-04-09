@@ -35,7 +35,11 @@ class SlideDriver extends Homey.Driver {
 							  
 							  var token = body.access_token;
 							  
+							  Homey.ManagerSettings.set('username', data.username);
+							  Homey.ManagerSettings.set('password', data.password);
+							  
 							  Homey.ManagerSettings.set('token', token);
+							  Homey.ManagerSettings.set('token_expires', body.expires_at);
 							  
 							  request(
 								  {
@@ -93,22 +97,7 @@ class SlideDriver extends Homey.Driver {
 						}
 					  }
 					);
-
-	          /*
-	          this.login({ username, password })
-	            .then(credentialsAreValid => {
-	              if( credentialsAreValid === true ) {
-	                callback( null, true );
-	              } else if( credentialsAreValid === false ) {
-	                callback( null, false );
-	              } else {
-	                throw new Error('Invalid Response');
-	              }
-	            })
-	            .catch(err => {
-	              callback(err);
-	            });
-	            */
+					
 	      });
 	
 	    socket.on('list_devices', function( data, callback ) {
@@ -119,14 +108,75 @@ class SlideDriver extends Homey.Driver {
 	      // fire the callback when searching is done
 	      callback( null, devices );
 	
-	      // when no devices are found, return an empty array
-	      // callback( null, [] );
-	
-	      // or fire a callback with Error to show that instead
-	      // callback( new Error('Something bad has occured!') );
 	    });
 	  }
 
+	  onInit() {
+		  
+		  console.log ("Driver initialisation done");
+		  
+		  this._StatusInterval = setInterval(this.checkToken.bind(this), 1000 * 60 * 60 * 24);
+		  
+	  }
+	  
+	  checkToken() {
+		  
+		  	var expires = Homey.ManagerSettings.get('token_expires');
+		  	var expires = "2019-05-09 11:15:53";
+			var expire_date = new Date(expires);
+			var expireDate = expire_date.getTime();
+			
+		  	var date = new Date();
+			var renew_date = date.getDate() + 14;	//Renew token after 14 days (30 days validity)
+			date.setDate(renew_date);
+			var newDate = date.getTime();
+
+			if (newDate > expireDate) {
+				
+				var username = Homey.ManagerSettings.set('username');
+				var password = Homey.ManagerSettings.set('password');
+							  
+				var formData = {
+					'email':		username, 
+					'password': 	password
+				};
+	          
+				  request(
+					  {
+					  	method: "post",
+					  	url: 'https://api.goslide.io/api/auth/login',
+					    body: formData,
+					    headers: {  
+							"content-type": "application/json",
+						},
+					  	json: true
+					  },
+					  function (error, response, body) {
+						  
+						  console.log ("result = " + response.statusCode + " & body = " + JSON.stringify (body));
+						  
+						  if (!error && response.statusCode == 200) {
+							  
+							  var token = body.access_token;
+							  
+							  Homey.ManagerSettings.set('token', token);
+							  Homey.ManagerSettings.set('token_expires', body.expires_at);
+							  
+						} else {
+
+							console.log ("Unable to renew token");
+							  
+						}
+					  }
+					);
+				
+			} else {
+				
+				console.log("Token is still valid for more than 14 days");
+				
+			}
+		  
+	  }
 }
 	  
 module.exports = SlideDriver;
