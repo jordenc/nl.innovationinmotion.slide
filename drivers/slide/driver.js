@@ -62,7 +62,7 @@ class SlideDriver extends Homey.Driver {
 													numid		: device.id,
 													slide_setup	: device.slide_setup,
 													curtain_type	: device.curtain_type,
-													position		: device.device_info.pos,
+													pos			: device.device_info.pos,
 													zone_id		: device.zone_id,
 													touch_go		: device.touch_go,
 													

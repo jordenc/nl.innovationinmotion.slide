@@ -24,11 +24,14 @@ class SlideDevice extends Homey.Device {
 			.registerRunListener((args, state) => {
 				
 				var token = Homey.ManagerSettings.get('token');
+				var device_data = this.getData();
+				
+				console.log('stop ' +  device_data.numid + ' met token ' + token);
 			  
 				request(
 				  {
 				  	method: "post",
-				  	url: 'https://api.goslide.io/api/slide/' + args.device.id + '/stop',
+				  	url: 'https://api.goslide.io/api/slide/' + device_data.numid + '/stop',
 				    headers: {  
 						"content-type": "application/json",
 						"Authorization": 'Bearer ' + token
@@ -41,21 +44,17 @@ class SlideDevice extends Homey.Device {
 					  
 					  if (!error && response.statusCode == 200) {
 						
-						callback( null, true );
+						return Promise.resolve( true );
 						  
 					} else {
 						  
-						  callback (body.error);
+						return Promise.resolve( false );
 						  
 					}
 				  }
 				);
 				
 			});
-        
-        //Poll the device every 30 seconds
-	    //this._StatusInterval = setInterval(this.check_status.bind(this), 30000);
-		//this.check_status();
         
     }
 
@@ -91,11 +90,14 @@ class SlideDevice extends Homey.Device {
 	 	
 	 		var requestData = {"pos":  value}
 	 		var device_data = this.getData();
+	 		var token = Homey.ManagerSettings.get('token');
 	 		
 	 		this.log("requestData = " + JSON.stringify(requestData));
 	 		
+	 		console.log ('slide ' + device_data.numid + ' moven met token ' + token);
+	 		
 	    		request({
-			    url: 'https://api.goslide.io/api/slide/' + args.device.id + '/position',
+			    url: 'https://api.goslide.io/api/slide/' + device_data.numid + '/position',
 			    method: "POST",
 			    headers: {  
 					"content-type": "application/json",
