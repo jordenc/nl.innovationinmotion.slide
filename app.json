@@ -5,7 +5,7 @@
         "nl": "Slide"
     },
     "sdk": 2,
-    "version": "0.3.1",
+    "version": "0.3.2",
     "compatibility": "*",
     "author": {
         "name": "Chamid Media",
@@ -49,8 +49,8 @@
           "capabilitiesOptions": {
 	          "dim": {
 		          "title": {
-			          "en": "Drag right to close",
-			          "nl": "Schuif rechts om te sluiten"
+			          "en": "Drag to open/close",
+			          "nl": "Verschuif om te openen/sluiten"
 		          }
 	          }
 	      },

@@ -66,6 +66,7 @@ class SlideDevice extends Homey.Device {
         var device_data = this.getData();
 
 		if (device_data.pos < 0) device_data.pos = 0;
+		if (device_data.pos > 1) device_data.pos = 1;
         this.setCapabilityValue ("dim", device_data.pos);
         
     }
@@ -73,8 +74,9 @@ class SlideDevice extends Homey.Device {
     // this method is called when the Device is deleted
     onDeleted() {
         this.log('device deleted');
+        clearInterval(this._StatusInterval);
     }
-
+    
     onCapabilityDim (value, opts, callback) {
 	    
 	    this.log("opts = " + JSON.stringify (opts));
@@ -118,11 +120,11 @@ class SlideDevice extends Homey.Device {
 			            
 			            if (body.response == "success") {
 				         
-				         	callback (null, true);
+				         	return true;
 				            
 				        } else {
 					     
-					     	callback (body.response, false);
+					     	return false;
 					        
 					    }
 			            
@@ -174,6 +176,7 @@ class SlideDevice extends Homey.Device {
 				   		//var result = JSON.parse(body);
 		            
 			            if (body.data.pos < 0) body.data.pos = 0;
+			            if (body.data.pos > 1) body.data.pos = 1;
 			            
 			            console.log("UPDATE dim status naar " + body.data.pos);
 			            thisdevice.setCapabilityValue ("dim", body.data.pos);

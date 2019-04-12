@@ -15,6 +15,9 @@ Use at your own risk, I accept no responsibility for any damages caused by using
 
 # Changelog
 
+**Version 0.3.2**
+- Minor bugfixes
+
 **Version 0.3.1** 
 - Fixed missing files
 
