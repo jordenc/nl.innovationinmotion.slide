@@ -6,7 +6,8 @@
     },
     "sdk": 2,
     "version": "0.3.2",
-    "compatibility": "*",
+    "compatibility": ">=1.5.0",
+    "brandColor": "#284874",
     "author": {
         "name": "Chamid Media",
         "email": "info@chamidmedia.nl"
