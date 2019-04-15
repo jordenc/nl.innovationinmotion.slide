@@ -5,7 +5,7 @@
         "nl": "Slide"
     },
     "sdk": 2,
-    "version": "0.3.2",
+    "version": "0.3.3",
     "compatibility": ">=1.5.0",
     "brandColor": "#284874",
     "author": {
@@ -45,8 +45,8 @@
               "large": "drivers/slide/assets/images/large.jpg",
               "small": "drivers/slide/assets/images/small.jpg"
           },
-          "class": "windowcoverings",
-          "capabilities": ["dim"],
+          "class": "curtain",
+          "capabilities": ["windowcoverings_set"],
           "capabilitiesOptions": {
 	          "dim": {
 		          "title": {

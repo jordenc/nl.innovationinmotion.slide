@@ -11,7 +11,7 @@ class SlideDevice extends Homey.Device {
         this.log('name:', this.getName());
         this.log('class:', this.getClass());
 
-        this.registerCapabilityListener('dim', this.onCapabilityDim.bind(this));
+        this.registerCapabilityListener('windowcoverings_set', this.onCapabilitySet.bind(this));
         
         var device_data = this.getData();
 
@@ -67,7 +67,7 @@ class SlideDevice extends Homey.Device {
 
 		if (device_data.pos < 0) device_data.pos = 0;
 		if (device_data.pos > 1) device_data.pos = 1;
-        this.setCapabilityValue ("dim", device_data.pos);
+        this.setCapabilityValue ("windowcoverings_set", 1 - device_data.pos);
         
     }
 
@@ -77,7 +77,7 @@ class SlideDevice extends Homey.Device {
         clearInterval(this._StatusInterval);
     }
     
-    onCapabilityDim (value, opts, callback) {
+    onCapabilitySet (value, opts, callback) {
 	    
 	    this.log("opts = " + JSON.stringify (opts));
 	    
@@ -91,7 +91,7 @@ class SlideDevice extends Homey.Device {
 		 	
 	 	} else {
 	 	
-	 		var requestData = {"pos":  value}
+	 		var requestData = {"pos":  1 - value}
 	 		var device_data = this.getData();
 	 		var token = Homey.ManagerSettings.get('token');
 	 		
@@ -179,7 +179,7 @@ class SlideDevice extends Homey.Device {
 			            if (body.data.pos > 1) body.data.pos = 1;
 			            
 			            console.log("UPDATE dim status naar " + body.data.pos);
-			            thisdevice.setCapabilityValue ("dim", body.data.pos);
+			            thisdevice.setCapabilityValue ("windowcoverings_set", 1 - body.data.pos);
 			        
 			        } catch (e) {
 				        
