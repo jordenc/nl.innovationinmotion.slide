@@ -132,8 +132,8 @@ class SlideDevice extends Homey.Device {
 			        else {
 			
 			            console.log("error: " + error)
-			            console.log("response.statusCode: " + response.statusCode)
-			            console.log("response.statusText: " + response.statusText)
+			            return false;
+			            
 			        }
 			        
 			    }

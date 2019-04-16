@@ -17,6 +17,7 @@ Use at your own risk, I accept no responsibility for any damages caused by using
 
 **Version 0.3.3**
 - Changed device type, please remove and re-add your devices
+- Minor bugfix
 
 **Version 0.3.2**
 - Minor bugfixes
