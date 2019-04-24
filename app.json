@@ -55,17 +55,6 @@
 		          }
 	          }
 	      },
-	      "mobile": {
-            "components": [
-                {
-                    "id": "slider",
-                    "capabilities": [ "dim" ],
-                    "options": {
-                        "showTitle": true
-                    }
-                }
-				]
-		  },
           "pair": [
 	            {
 		          "id": "login",
