@@ -16,6 +16,7 @@ Use at your own risk, I accept no responsibility for any damages caused by using
 # Changelog
 
 **Version 0.3.4**
+- Minor bugfix
 - Updated device icon
 
 **Version 0.3.3**

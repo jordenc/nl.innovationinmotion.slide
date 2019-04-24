@@ -164,7 +164,7 @@ class SlideDevice extends Homey.Device {
 		},
 		function (error, response, body) {
 			
-			console.log("response.statusCode: " + response.statusCode)
+			console.log("response =  " + JSON.stringify(response));
 			console.log("body = " + JSON.stringify (body));
 	        
 	        if (typeof response !== 'undefined' && typeof response.statusCode !== 'undefined') {
@@ -190,7 +190,7 @@ class SlideDevice extends Homey.Device {
 		        } else {
 		
 		            console.log("error: " + error)
-		            console.log("response.statusCode: " + response.statusCode)
+		            //console.log("response.statusCode: " + response.statusCode)
 		            console.log("response.statusText: " + response.statusText)
 		        }
 	        
