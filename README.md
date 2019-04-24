@@ -15,6 +15,9 @@ Use at your own risk, I accept no responsibility for any damages caused by using
 
 # Changelog
 
+**Version 0.3.4**
+- Updated device icon
+
 **Version 0.3.3**
 - Changed device type, please remove and re-add your devices
 - Minor bugfix
