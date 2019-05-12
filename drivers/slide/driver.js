@@ -33,10 +33,10 @@ class SlideDriver extends Homey.Driver {
 						  
 						  if (!error && response.statusCode == 200) {
 							  
-							  var token = body.access_token;
-							  
 							  Homey.ManagerSettings.set('username', data.username);
 							  Homey.ManagerSettings.set('password', data.password);
+				
+							  var token = body.access_token;
 							  
 							  Homey.ManagerSettings.set('token', token);
 							  Homey.ManagerSettings.set('token_expires', body.expires_at);
@@ -123,8 +123,7 @@ class SlideDriver extends Homey.Driver {
 	  checkToken() {
 		  
 		  	var expires = Homey.ManagerSettings.get('token_expires');
-		  	var expires = "2019-05-09 11:15:53";
-			var expire_date = new Date(expires);
+		  	var expire_date = new Date(expires);
 			var expireDate = expire_date.getTime();
 			
 		  	var date = new Date();
@@ -133,10 +132,10 @@ class SlideDriver extends Homey.Driver {
 			var newDate = date.getTime();
 
 			if (newDate > expireDate) {
+		      	
+				var username = Homey.ManagerSettings.get('username');
+				var password = Homey.ManagerSettings.get('password');
 				
-				var username = Homey.ManagerSettings.set('username');
-				var password = Homey.ManagerSettings.set('password');
-							  
 				var formData = {
 					'email':		username, 
 					'password': 	password
