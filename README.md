@@ -15,6 +15,9 @@ Use at your own risk, I accept no responsibility for any damages caused by using
 
 # Changelog
 
+**Version 0.3.6**
+- Small fix for error at first startup
+
 **Version 0.3.5**
 - Fixed re-authentication when token has expired. You might have to login again via pairing if your Slides stop working via Homey, due to a bug in the previous versions.
 

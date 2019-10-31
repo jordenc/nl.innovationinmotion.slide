@@ -136,39 +136,47 @@ class SlideDriver extends Homey.Driver {
 				var username = Homey.ManagerSettings.get('username');
 				var password = Homey.ManagerSettings.get('password');
 				
-				var formData = {
-					'email':		username, 
-					'password': 	password
-				};
-	          
-				  request(
-					  {
-					  	method: "post",
-					  	url: 'https://api.goslide.io/api/auth/login',
-					    body: formData,
-					    headers: {  
-							"content-type": "application/json",
-						},
-					  	json: true
-					  },
-					  function (error, response, body) {
-						  
-						  console.log ("result = " + response.statusCode + " & body = " + JSON.stringify (body));
-						  
-						  if (!error && response.statusCode == 200) {
+				if (username && password) {
+					
+					var formData = {
+						'email':		username, 
+						'password': 	password
+					};
+		          
+					  request(
+						  {
+						  	method: "post",
+						  	url: 'https://api.goslide.io/api/auth/login',
+						    body: formData,
+						    headers: {  
+								"content-type": "application/json",
+							},
+						  	json: true
+						  },
+						  function (error, response, body) {
 							  
-							  var token = body.access_token;
+							  console.log ("result = " + response.statusCode + " & body = " + JSON.stringify (body));
 							  
-							  Homey.ManagerSettings.set('token', token);
-							  Homey.ManagerSettings.set('token_expires', body.expires_at);
-							  
-						} else {
-
-							console.log ("Unable to renew token");
-							  
-						}
-					  }
-					);
+							  if (!error && response.statusCode == 200) {
+								  
+								  var token = body.access_token;
+								  
+								  Homey.ManagerSettings.set('token', token);
+								  Homey.ManagerSettings.set('token_expires', body.expires_at);
+								  
+							} else {
+	
+								console.log ("Unable to renew token");
+								  
+							}
+						  }
+						);
+						
+					} else {
+						
+						console.log ("No username and password setup yet");
+						
+					}
 				
 			} else {
 				
