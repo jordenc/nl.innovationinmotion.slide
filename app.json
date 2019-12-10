@@ -5,7 +5,7 @@
         "nl": "Slide"
     },
     "sdk": 2,
-    "version": "0.3.7",
+    "version": "0.3.8",
     "compatibility": ">=1.5.0",
     "brandColor": "#284874",
     "author": {
@@ -20,6 +20,7 @@
 	        }
 	    }
 	},
+	"homepage": "https://homey.d2c.nl/",
 	"homeyCommunityTopicId": 11915,
     "images": {
       "large": "./assets/images/large.jpg",
