@@ -5,13 +5,21 @@
         "nl": "Slide"
     },
     "sdk": 2,
-    "version": "0.3.9",
+    "version": "0.4.0",
     "compatibility": ">=1.5.0",
     "brandColor": "#284874",
     "author": {
-        "name": "Chamid Media",
-        "email": "info@chamidmedia.nl"
+        "name": "Corbata",
+        "email": "info@corbata.nl"
     },
+    "contributors": {
+	    "developers": [
+	      {
+	        "name": "Corbata",
+	        "email": "info@corbata.nl"
+	      }
+	    ],
+	},
     "contributing": {
 	    "donate": {
 	        "paypal": {
@@ -25,7 +33,8 @@
 			"usageConstant": 1
     	}
     },
-	"homepage": "https://homey.d2c.nl/",
+	"homepage": "https://slide.store/",
+	"support": "mailto:support@corbata.nl",
 	"homeyCommunityTopicId": 11915,
     "images": {
       "large": "./assets/images/large.jpg",
@@ -37,8 +46,8 @@
     },
     "category": "appliances",
     "description": {
-    	"en": "Control your curtains with Slide through Homey",
-		"nl": "Bestuur je gordijnen met Slide via Homey"
+    	"en": "Make your curtains smart in no-time",
+		"nl": "Maak je gordijnen slim met Slide"
     },
     "drivers": [
       {
