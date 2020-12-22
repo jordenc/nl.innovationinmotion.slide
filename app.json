@@ -7,7 +7,7 @@
     "sdk": 2,
     "version": "0.4.0",
     "compatibility": ">=1.5.0",
-    "brandColor": "#284874",
+    "brandColor": "#f77933",
     "author": {
         "name": "Corbata",
         "email": "info@corbata.nl"
@@ -15,10 +15,10 @@
     "contributors": {
 	    "developers": [
 	      {
-	        "name": "Corbata",
+	        "name": "Corbata.nl",
 	        "email": "info@corbata.nl"
 	      }
-	    ],
+	    ]
 	},
     "contributing": {
 	    "donate": {
