@@ -77,11 +77,11 @@ class SlideDevice extends Homey.Device {
         clearInterval(this._StatusInterval);
     }
     
-    onCapabilitySet (value, opts, callback) {
+    async onCapabilitySet (value, opts) {
 	    
 	    this.log("opts = " + JSON.stringify (opts));
 	    
-	 	this.log("callback = " + JSON.stringify (callback));
+	 	//this.log("callback = " + JSON.stringify (callback));
 	    
 	    this.log ("DIM value = " + JSON.stringify (value));
 	 	
@@ -97,9 +97,9 @@ class SlideDevice extends Homey.Device {
 	 		
 	 		this.log("requestData = " + JSON.stringify(requestData));
 	 		
-	 		console.log ('slide ' + device_data.numid + ' moven met token ' + token);
+	 		//console.log ('slide ' + device_data.numid + ' moven met token ' + token);
 	 		
-	    		request({
+	    	request({
 			    url: 'https://api.goslide.io/api/slide/' + device_data.numid + '/position',
 			    method: "POST",
 			    headers: {  
@@ -118,13 +118,17 @@ class SlideDevice extends Homey.Device {
 			            console.log("response.statusCode: " + response.statusCode)
 			            console.log("body = " + JSON.stringify (body));
 			            
-			            if (body.response == "success") {
+			            if (body.data.response == "success") {
 				         
-				         	return true;
-				            
+						 	console.log("return TRUE");
+							//Promise.resolve(true);
+							return Promise.resolve();
+				         	
 				        } else {
 					     
-					     	return false;
+						 	console.log("return FALSE");
+					     	//return Promise.resolve( false );
+							return callback(body.error)
 					        
 					    }
 			            
@@ -132,7 +136,7 @@ class SlideDevice extends Homey.Device {
 			        else {
 			
 			            console.log("error: " + error)
-			            return false;
+			            return Promise.resolve( false );
 			            
 			        }
 			        
@@ -164,8 +168,8 @@ class SlideDevice extends Homey.Device {
 		},
 		function (error, response, body) {
 			
-			console.log("response =  " + JSON.stringify(response));
-			console.log("body = " + JSON.stringify (body));
+			//console.log("response =  " + JSON.stringify(response));
+			//console.log("body = " + JSON.stringify (body));
 	        
 	        if (typeof response !== 'undefined' && typeof response.statusCode !== 'undefined') {
 		        
