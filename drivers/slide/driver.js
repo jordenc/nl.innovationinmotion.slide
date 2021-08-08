@@ -4,6 +4,7 @@ const Homey = require('homey');
 let request	= require('request');
 let devices = [];
 
+
 class SlideDriver extends Homey.Driver {
 	
 	onPair( socket ) {
@@ -31,7 +32,7 @@ class SlideDriver extends Homey.Driver {
 						  
 						  console.log ("result = " + response.statusCode + " & body = " + JSON.stringify (body));
 						  
-						  if (!error && response.statusCode == 200) {
+						  if (!error && response.statusCode === 200) {
 							  
 							  Homey.ManagerSettings.set('username', data.username);
 							  Homey.ManagerSettings.set('password', data.password);
@@ -55,7 +56,7 @@ class SlideDriver extends Homey.Driver {
 									  
 									  console.log ("result = " + response.statusCode + " & body = " + JSON.stringify (body));
 									  
-									  if (!error && response.statusCode == 200) {
+									  if (!error && response.statusCode === 200) {
 										 
 										body.slides.forEach (function(device) {
 											
@@ -119,7 +120,8 @@ class SlideDriver extends Homey.Driver {
 		  this.checkToken();
 		  
 	  }
-	  
+
+
 	  checkToken() {
 		  
 		  	var expires = Homey.ManagerSettings.get('token_expires');
@@ -157,7 +159,7 @@ class SlideDriver extends Homey.Driver {
 							  
 							  console.log ("result = " + response.statusCode + " & body = " + JSON.stringify (body));
 							  
-							  if (!error && response.statusCode == 200) {
+							  if (!error && response.statusCode === 200) {
 								  
 								  var token = body.access_token;
 								  

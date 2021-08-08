@@ -39,7 +39,7 @@ class SlideDevice extends Homey.Device {
 					  
 					  console.log ("result = " + response.statusCode + " & body = " + JSON.stringify (body));
 					  
-					  if (!error && response.statusCode == 200) {
+					  if (!error && response.statusCode === 200) {
 						
 						return Promise.resolve( true );
 						  
@@ -118,7 +118,7 @@ class SlideDevice extends Homey.Device {
 			            console.log("response.statusCode: " + response.statusCode)
 			            console.log("body = " + JSON.stringify (body));
 			            
-			            if (body.data.response == "success") {
+			            if (body.data.response === "success") {
 				         
 						 	console.log("return TRUE");
 							//Promise.resolve(true);
