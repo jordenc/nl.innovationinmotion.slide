@@ -1,119 +1,126 @@
 {
-    "id": "nl.innovationinmotion.slide",
-    "name": {
+  "id": "nl.innovationinmotion.slide",
+  "name": {
+    "en": "Slide",
+    "nl": "Slide"
+  },
+  "sdk": 2,
+  "version": "0.4.2",
+  "compatibility": ">=1.5.0",
+  "brandColor": "#f77933",
+  "author": {
+    "name": "Corbata",
+    "email": "info@corbata.nl"
+  },
+  "contributors": {
+    "developers": [
+      {
+        "name": "Corbata.nl",
+        "email": "info@corbata.nl"
+      }
+    ]
+  },
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "email": "info@chamidmedia.nl",
+        "currency": "EUR"
+      }
+    }
+  },
+  "energy": {
+    "approximation": {
+      "usageConstant": 1
+    }
+  },
+  "homepage": "https://slide.store/",
+  "support": "mailto:support@slide.store",
+  "homeyCommunityTopicId": 11915,
+  "images": {
+    "large": "./assets/images/large.jpg",
+    "small": "./assets/images/small.jpg"
+  },
+  "tags": {
+    "en": [
+      "Curtains"
+    ],
+    "nl": [
+      "Gordijnen"
+    ]
+  },
+  "category": "appliances",
+  "description": {
+    "en": "Make your curtains smart in no-time",
+    "nl": "Maak je gordijnen slim met Slide"
+  },
+  "drivers": [
+    {
+      "id": "slide",
+      "name": {
         "en": "Slide",
         "nl": "Slide"
-    },
-    "sdk": 2,
-    "version": "0.4.2",
-    "compatibility": ">=1.5.0",
-    "brandColor": "#f77933",
-    "author": {
-        "name": "Corbata",
-        "email": "info@corbata.nl"
-    },
-    "contributors": {
-	    "developers": [
-	      {
-	        "name": "Corbata.nl",
-	        "email": "info@corbata.nl"
-	      }
-	    ]
-	},
-    "contributing": {
-	    "donate": {
-	        "paypal": {
-	            "email": "info@chamidmedia.nl",
-	            "currency": "EUR"
-	        }
-	    }
-	},
-	"energy": {
-    	"approximation": {
-			"usageConstant": 1
-    	}
-    },
-	"homepage": "https://slide.store/",
-	"support": "mailto:support@slide.store",
-	"homeyCommunityTopicId": 11915,
-    "images": {
-      "large": "./assets/images/large.jpg",
-      "small": "./assets/images/small.jpg"
-    },
-    "tags": {
-        "en": [ "Curtains" ],
-        "nl": [ "Gordijnen" ]
-    },
-    "category": "appliances",
-    "description": {
-    	"en": "Make your curtains smart in no-time",
-		"nl": "Maak je gordijnen slim met Slide"
-    },
-    "drivers": [
-      {
-          "id": "slide",
-          "name": {
-              "en": "Slide",
-              "nl": "Slide"
-          },
-          "images": {
-              "large": "drivers/slide/assets/images/large.jpg",
-              "small": "drivers/slide/assets/images/small.jpg"
-          },
-          "class": "curtain",
-          "capabilities": ["windowcoverings_set"],
-          "capabilitiesOptions": {
-	          "dim": {
-		          "title": {
-			          "en": "Drag to open/close",
-			          "nl": "Verschuif om te openen/sluiten"
-		          }
-	          }
-	      },
-          "connectivity": ["cloud"],
-          "pair": [
-	            {
-		          "id": "login",
-		          "template": "login_credentials",
-		          "options": {
-			          "logo": "small.jpg"
-		          }
-	            },
-                {
-                    "id": "list_devices",
-                    "template": "list_devices",
-                    "navigation": {
-                        "next": "add_devices"
-                    }
-                },
-                {
-                    "id": "add_devices",
-                    "template": "add_devices"
-                }
-          ]
-      }
-    ],
-    "flow": {
-	    "actions": [
-        {
-            "id": "ImmediateStop",
-            "title": {
-                "en": "Immediate Stop",
-                "nl": "Stop direct"
-            },
-            "args": [
-              {
-                "name": "device",
-                "type": "device",
-                "placeholder": {
-                  "en": "Select slide",
-                  "nl": "Selecteer slide"
-                },
-	            "filter": "driver_id=slide"
-              }
-            ]
+      },
+      "images": {
+        "large": "drivers/slide/assets/images/large.jpg",
+        "small": "drivers/slide/assets/images/small.jpg"
+      },
+      "class": "curtain",
+      "capabilities": [
+        "windowcoverings_set"
+      ],
+      "capabilitiesOptions": {
+        "dim": {
+          "title": {
+            "en": "Drag to open/close",
+            "nl": "Verschuif om te openen/sluiten"
+          }
         }
-       
-       ]
-	}
+      },
+      "connectivity": [
+        "cloud"
+      ],
+      "pair": [
+        {
+          "id": "login",
+          "template": "login_credentials",
+          "options": {
+            "logo": "small.jpg"
+          }
+        },
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ]
+    }
+  ],
+  "flow": {
+    "actions": [
+      {
+        "id": "ImmediateStop",
+        "title": {
+          "en": "Immediate Stop",
+          "nl": "Stop direct"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select slide",
+              "nl": "Selecteer slide"
+            },
+            "filter": "driver_id=slide"
+          }
+        ]
+      }
+    ]
+  }
 }
