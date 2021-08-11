@@ -5,7 +5,6 @@
   "main": "app.js",
   "dependencies": {
     "homey": "^2.20.6",
-    "homey-log": "^2.0.1",
     "request": "2.88.2"
   },
   "scripts": {

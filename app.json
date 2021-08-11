@@ -54,7 +54,7 @@
     "nl": "Maak je gordijnen slim met Slide"
   },
   "capabilities": {
-    "measure_touch_go_state": {
+    "touch_go_state": {
       "type": "boolean",
       "title": {
         "en": "Touch & Go"
@@ -64,7 +64,7 @@
       "uiComponent": "sensor",
       "icon": "/assets/touch-icon.svg"
     },
-    "measure_curtain_position": {
+    "curtain_position": {
       "type": "number",
       "title": {
         "en": "Curtain position",
@@ -75,7 +75,7 @@
       "uiComponent": "sensor",
       "icon": "/assets/percent-icon.svg",
       "units": {
-        "en": " %"
+        "en": "%"
       },
       "min": 0,
       "max": 100,
@@ -98,8 +98,8 @@
       "capabilities": [
         "windowcoverings_closed",
         "windowcoverings_set",
-        "measure_curtain_position",
-        "measure_touch_go_state"
+        "curtain_position",
+        "touch_go_state"
       ],
       "capabilitiesOptions": {
         "dim": {
@@ -197,6 +197,81 @@
               "nl": "Selecteer slide"
             },
             "filter": "driver_id=slide"
+          }
+        ]
+      },
+      {
+        "id": "OpenZone",
+        "title": {
+          "en": "Open all curtains in one zone",
+          "nl": "Open alle gordijnen in een zone"
+        },
+        "titleFormatted": {
+          "en": "Open all curtains in zone [[zone]]",
+          "nl": "Open alle gordijnen in zone [[zone]]"
+        },
+        "args": [
+          {
+            "name": "zone",
+            "type": "autocomplete",
+            "placeholder": {
+              "en": "Zone"
+            }
+          }
+        ]
+      },
+      {
+        "id": "CloseZone",
+        "title": {
+          "en": "Close all curtains in one zone",
+          "nl": "Sluit alle gordijnen in een zone"
+        },
+        "titleFormatted": {
+          "en": "Close all curtains in zone [[zone]]",
+          "nl": "Sluit alle gordijnen in zone [[zone]]"
+        },
+        "args": [
+          {
+            "name": "zone",
+            "type": "autocomplete",
+            "placeholder": {
+              "en": "Zone"
+            }
+          }
+        ]
+      },
+      {
+        "id": "SetZone",
+        "title": {
+          "en": "Set the position for all curtains in one zone",
+          "nl": "Zet de positie van alle gordijnen in een zone"
+        },
+        "titleFormatted": {
+          "en": "Set the position for all curtains in zone [[zone]] to [[windowcoverings_set]]",
+          "nl": "Zet de positie van alle gordijnen in zone [[zone]] naar [[windowcoverings_set]]"
+        },
+        "hint": {
+          "en": "Change the position to open (100%), closed (0%), or a value in between.",
+          "nl": "Verander de positie naar open (100%), gesloten (0%), of een een waarde daartussen."
+        },
+        "args": [
+          {
+            "name": "zone",
+            "type": "autocomplete",
+            "placeholder": {
+              "en": "Zone"
+            }
+          },
+          {
+            "name": "windowcoverings_set",
+            "type": "range",
+            "min": 0,
+            "max": 1,
+            "step": 0.01,
+            "value": 0.5,
+            "label": "%",
+            "labelMultiplier": 100,
+            "labelDecimals": 0
           }
         ]
       }

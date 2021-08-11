@@ -19,13 +19,16 @@ class SlideDevice
 
     /**
      * Get state of this specific Slide
+     *
+     * @return {Promise<string>}
      */
     getState() {
         const self = this;
         return new Promise(function (resolve, reject) {
             self.api.get('slide/' + self.device_data.numid + '/info').then(body => {
-                self.saveStateToHomey(body.data.pos, body.data.touch_go, false);
-            }, reject);
+                self.saveStateToHomey(body.data.pos, body.data.touch_go, body.data.calib_time, false);
+                resolve(body.data);
+            }).catch(reject);
         });
     }
 
@@ -34,9 +37,11 @@ class SlideDevice
      *
      * @param position
      * @param touch_go
+     * @param calib_time
      * @param freshDevice
+     * @return void
      */
-    saveStateToHomey(position, touch_go, freshDevice) {
+    saveStateToHomey(position, touch_go, calib_time, freshDevice) {
         if (position < 0) {
             position = 0;
         }
@@ -45,9 +50,13 @@ class SlideDevice
         }
         position = 1 - position;
 
+        this.homeyDevice.calib_time = calib_time;
+        this.homeyDevice.pos = position;
+        this.homeyDevice.touch_go = touch_go;
+
         this.homeyDevice.setCapabilityValue("windowcoverings_set", position);
-        this.homeyDevice.setCapabilityValue("measure_curtain_position", position * 100);
-        this.homeyDevice.setCapabilityValue("measure_touch_go_state", touch_go);
+        this.homeyDevice.setCapabilityValue("curtain_position", position * 100);
+        this.homeyDevice.setCapabilityValue("touch_go_state", touch_go);
 
         if (freshDevice) {
             this.homeyDevice.setCapabilityValue("windowcoverings_closed", false);
@@ -58,11 +67,12 @@ class SlideDevice
         if (position >= 0.9) {
             this.homeyDevice.setCapabilityValue("windowcoverings_closed", false);
         }
-
     }
 
     /**
      * Stop motor of this specific Slide
+     *
+     * @return {Promise<string>}
      */
     immediateStop() {
         const self = this;
@@ -103,7 +113,16 @@ class SlideDevice
         const self = this;
         return new Promise(function (resolve, reject) {
             self.api.patch('slide/' + self.device_data.numid,{"touch_go": value})
-                .then(resolve, reject);
+                .then(body => {
+                    if (body.data.response === 'success') {
+                        self.homeyDevice.setCapabilityValue("touch_go_state", value);
+                        resolve();
+                    } else {
+                        reject();
+                    }
+                }).catch(message => {
+                    reject(message);
+                });
         });
     }
 }

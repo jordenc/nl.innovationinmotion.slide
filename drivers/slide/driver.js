@@ -33,6 +33,7 @@ class SlideDriver extends Homey.Driver {
 									  id: device.device_id,
 									  numid: device.id,
 									  name: device.device_name,
+									  calib_time: 30000,
 									  slide_setup: device.slide_setup,
 									  household_id: device.household_id,
 									  zone_id: device.zone_id,
@@ -68,7 +69,7 @@ class SlideDriver extends Homey.Driver {
 	 */
 	onInit() {
 		  this.log("Driver initialisation done");
-		  this._StatusInterval = setInterval(this.checkToken.bind(this), 86400000);
+		  this.timer = setInterval(this.checkToken.bind(this), 86400000);
 		  this.checkToken();
 	  }
 
@@ -99,13 +100,15 @@ class SlideDriver extends Homey.Driver {
 					Homey.ManagerSettings.set('token', result.access_token);
 					Homey.ManagerSettings.set('token_expires', result.expires_at)
 
+				}).catch(err => {
+					this.log(err);
 				});
 
 			} else {
-				console.log("No username and password setup yet");
+				this.log("No username and password setup yet");
 			}
 		} else {
-			console.log("Token is still valid for more than 14 days");
+			this.log("Token is still valid for more than 14 days");
 		}
 	}
 }
