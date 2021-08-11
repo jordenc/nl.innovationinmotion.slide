@@ -53,6 +53,36 @@
     "en": "Make your curtains smart in no-time",
     "nl": "Maak je gordijnen slim met Slide"
   },
+  "capabilities": {
+    "measure_touch_go_state": {
+      "type": "boolean",
+      "title": {
+        "en": "Touch & Go"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/touch-icon.svg"
+    },
+    "measure_curtain_position": {
+      "type": "number",
+      "title": {
+        "en": "Curtain position",
+        "nl": "Gordijn positie"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/percent-icon.svg",
+      "units": {
+        "en": " %"
+      },
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "decimals": 0
+    }
+  },
   "drivers": [
     {
       "id": "slide",
@@ -66,18 +96,31 @@
       },
       "class": "curtain",
       "capabilities": [
-        "windowcoverings_set"
+        "windowcoverings_closed",
+        "windowcoverings_set",
+        "measure_curtain_position",
+        "measure_touch_go_state"
       ],
       "capabilitiesOptions": {
         "dim": {
           "title": {
             "en": "Drag to open/close",
             "nl": "Verschuif om te openen/sluiten"
+          },
+          "preventInsights": true,
+          "preventTag": true,
+          "uiQuickAction": false
+        },
+        "onoff": {
+          "title": {
+            "en": "Open/close curtain",
+            "nl": "Open/sluit gordijn"
           }
         }
       },
       "connectivity": [
-        "cloud"
+        "cloud",
+        "lan"
       ],
       "pair": [
         {
@@ -106,8 +149,44 @@
       {
         "id": "ImmediateStop",
         "title": {
-          "en": "Immediate Stop",
-          "nl": "Stop direct"
+          "en": "Immediate motor stop",
+          "nl": "Stop motor direct"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select slide",
+              "nl": "Selecteer slide"
+            },
+            "filter": "driver_id=slide"
+          }
+        ]
+      },
+      {
+        "id": "EnableTouchGo",
+        "title": {
+          "en": "Enable Touch & Go",
+          "nl": "Activeer Touch & Go"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select slide",
+              "nl": "Selecteer slide"
+            },
+            "filter": "driver_id=slide"
+          }
+        ]
+      },
+      {
+        "id": "DisableTouchGo",
+        "title": {
+          "en": "Disable Touch & Go",
+          "nl": "Deactiveer Touch & Go"
         },
         "args": [
           {

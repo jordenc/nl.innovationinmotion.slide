@@ -1,0 +1,8 @@
+{
+  "name": "nl.innovationinmotion.slide",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "build": "tsc"
+  }
+}

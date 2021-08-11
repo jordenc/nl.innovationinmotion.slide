@@ -27,21 +27,28 @@ class CloudApi
      * Do get method to Slide cloud API
      *
      * @param apiMethod
-     * @param callback
+     * @return {Promise<string>}
      */
-    get(apiMethod, callback) {
-        console.log('CloudApi GET ' +  apiMethod + ' met token ' + this.token);
+    get(apiMethod) {
+        console.log('CloudApi GET ' +  apiMethod);
 
-        request({
-            url:  this.base_url + apiMethod,
-            method: "GET",
-            headers: this.headers,
-            json: true,
-        }, function (error, response, body) {
-            console.log("CloudApi result = " + response.statusCode + " & body = " + JSON.stringify(body));
-            callback((!error && response.statusCode === 200), body);
+        const self = this;
+        return new Promise(function (resolve, reject) {
+            request({
+                url: self.base_url + apiMethod,
+                method: "GET",
+                headers: self.headers,
+                json: true,
+            }, function (error, response, body) {
+                console.log("CloudApi result = " + response.statusCode + " & body = " + JSON.stringify(body));
+
+                if (!error && response.statusCode === 200) {
+                    resolve(body);
+                } else {
+                    reject(new Error(body.message));
+                }
+            });
         });
-
     }
 
     /**
@@ -49,23 +56,30 @@ class CloudApi
      *
      * @param apiMethod
      * @param requestData
-     * @param callback
+     * @return {Promise<string>}
      */
-    post(apiMethod, requestData, callback) {
-        console.log('CloudApi POST ' +  apiMethod + ' met token ' + this.token + ' requestData = ' +
+    post(apiMethod, requestData) {
+        console.log('CloudApi POST ' +  apiMethod + ' requestData = ' +
             JSON.stringify(requestData));
 
-        return request({
-            url:  this.base_url + apiMethod,
-            method: "POST",
-            headers: this.headers,
-            json: true,
-            body: requestData
-        },function (error, response, body) {
+        const self = this;
+        return new Promise(function (resolve, reject) {
 
-            //if (typeof response !== 'undefined' && typeof response.statusCode !== 'undefined') {
-            console.log("CloudApi result = " + response.statusCode + " & body = " + JSON.stringify(body));
-            callback((!error && response.statusCode === 200), body);
+            return request({
+                url: self.base_url + apiMethod,
+                method: "POST",
+                headers: self.headers,
+                json: true,
+                body: requestData
+            }, function (error, response, body) {
+
+                console.log("CloudApi result = " + response.statusCode + " & body = " + JSON.stringify(body));
+                if (!error && response.statusCode === 200) {
+                    resolve(body);
+                } else {
+                    reject(new Error(body.message));
+                }
+            });
         });
     }
 
@@ -74,23 +88,30 @@ class CloudApi
      *
      * @param apiMethod
      * @param requestData
-     * @param callback
+     * @return {Promise<string>}
      */
-    patch(apiMethod, requestData, callback) {
-        console.log('CloudApi PATCH ' +  apiMethod + ' met token ' + this.token + ' requestData = ' +
+    patch(apiMethod, requestData) {
+        console.log('CloudApi PATCH ' +  apiMethod + ' requestData = ' +
             JSON.stringify(requestData));
 
-        return request({
-            url:  this.base_url + apiMethod,
-            method: "PATCH",
-            headers: this.headers,
-            json: true,
-            body: requestData
-        },function (error, response, body) {
+        const self = this;
+        return new Promise(function (resolve, reject) {
 
-            //if (typeof response !== 'undefined' && typeof response.statusCode !== 'undefined') {
-            console.log("CloudApi result = " + response.statusCode + " & body = " + JSON.stringify(body));
-            callback((!error && response.statusCode === 200), body);
+            return request({
+                url: self.base_url + apiMethod,
+                method: "PATCH",
+                headers: self.headers,
+                json: true,
+                body: requestData
+            }, function (error, response, body) {
+
+                console.log("CloudApi result = " + response.statusCode + " & body = " + JSON.stringify(body));
+                if (!error && response.statusCode === 200) {
+                    resolve(body);
+                } else {
+                    reject(new Error(body.message));
+                }
+            });
         });
     }
 }

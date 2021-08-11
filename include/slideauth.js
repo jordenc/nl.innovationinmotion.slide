@@ -1,6 +1,6 @@
 "use strict";
 
-let CloudApi = require('cloudapi');
+let CloudApi = require('./cloudapi');
 
 class SlideAuth
 {
@@ -16,19 +16,15 @@ class SlideAuth
     /**
      * Get Household-wide state overview
      *
+     * @param username
+     * @param password
      * @return {Promise<string>}
      */
     login(username, password) {
+        const self = this;
         return new Promise(function (resolve, reject) {
-            this.api.post(
-                'auth/login', {'email': username, 'password': password},
-                function (status, body) {
-                    if (status) {
-                        resolve(body);
-                    } else {
-                        reject(body);
-                    }
-                });
+            self.api.post('auth/login', {'email': username, 'password': password})
+                .then(resolve).catch(reject);
         });
     }
 }

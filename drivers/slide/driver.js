@@ -1,8 +1,8 @@
 "use strict";
 
 const Homey = require('homey');
-let SlideAuth = require('include/slideauth');
-let SlideHousehold = require('include/slidehousehold');
+let SlideAuth = require('../../include/slideauth');
+let SlideHousehold = require('../../include/slidehousehold');
 let devices = [];
 
 class SlideDriver extends Homey.Driver {
@@ -13,10 +13,7 @@ class SlideDriver extends Homey.Driver {
 	 */
 	onPair(socket) {
       
-	      socket.on('login', ( data, callback ) => {
-		      
-		      console.log ("mydata = " + JSON.stringify (data));
-
+	      socket.on('login', (data, callback) => {
 		      var slideAuth = new SlideAuth();
 		      slideAuth.login(data.username, data.password).then(result => {
 
@@ -35,32 +32,35 @@ class SlideDriver extends Homey.Driver {
 								  data: {
 									  id: device.device_id,
 									  numid: device.id,
+									  name: device.device_name,
 									  slide_setup: device.slide_setup,
-									  curtain_type: device.curtain_type,
-									  pos: device.device_info.pos,
+									  household_id: device.household_id,
 									  zone_id: device.zone_id,
 									  touch_go: device.touch_go,
-
+									  pos: device.device_info.pos,
 								  },
 								  name: device.device_name
-							  }
-						  );
+							  });
 					  });
 					  callback(null, devices);
-					  // callback (body.error);
-				  });
+
+				  }).catch(err => {
+				  	this.log(err);
+				  })
+
+			  }).catch(message => {
+			  	callback(message);
+			  	this.log(message);
 			  });
 	      });
-	
-	    socket.on('list_devices', function( data, callback ) {
-		      
-	      // emit when devices are still being searched
-	      socket.emit('list_devices', devices );
-	
-	      // fire the callback when searching is done
-	      callback( null, devices );
-	
-	    });
+
+	      socket.on('list_devices', function(data, callback) {
+			  // emit when devices are still being searched
+			  socket.emit('list_devices', devices);
+
+			  // fire the callback when searching is done
+			  callback(null, devices);
+	      });
 	  }
 
 	/**

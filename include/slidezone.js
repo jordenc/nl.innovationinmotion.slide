@@ -1,6 +1,6 @@
 "use strict";
 
-let CloudApi = require('cloudapi');
+let CloudApi = require('./cloudapi');
 
 class SlideZone
 {
@@ -22,17 +22,10 @@ class SlideZone
      * @return {Promise<string>}
      */
     setPosition(value) {
-        const zone_id = this.zone_id;
+        const self = this;
         return new Promise(function (resolve, reject) {
-            this.api.post(
-                'zones/' + zone_id + '/position', {"pos": 1 - value},
-                function (status, body) {
-                    if (status) {
-                        resolve(body);
-                    } else {
-                        reject(body);
-                    }
-                });
+            self.api.post('zones/' + self.zone_id + '/position', {"pos": 1 - value})
+                .then(resolve).catch(reject);
         });
     }
 }

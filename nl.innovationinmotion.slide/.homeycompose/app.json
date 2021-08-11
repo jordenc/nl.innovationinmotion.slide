@@ -1,0 +1,25 @@
+{
+  "id": "nl.innovationinmotion.slide",
+  "version": "1.0.0",
+  "compatibility": ">=5.0.0",
+  "sdk": 3,
+  "name": {
+    "en": "Slide"
+  },
+  "description": {
+    "en": "Control your curtains with Slide by Innovation In Motion (https://innovationinmotion.nl/), using Homey by Athom B.V."
+  },
+  "category": [
+    "tools"
+  ],
+  "permissions": [],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "author": {
+    "name": "Ruben Te Bogt",
+    "email": "ruben@rubentebogt.nl"
+  }
+}

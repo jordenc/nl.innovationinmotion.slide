@@ -1,6 +1,6 @@
 "use strict";
 
-let CloudApi = require('cloudapi');
+let CloudApi = require('./cloudapi');
 
 class SlideHousehold
 {
@@ -19,16 +19,21 @@ class SlideHousehold
      * @return {Promise<string>}
      */
     getOverview() {
+        const self = this;
         return new Promise(function (resolve, reject) {
-            this.api.get(
-                'slides/overview',
-                function (status, body) {
-                    if (status) {
-                        resolve(body);
-                    } else {
-                        reject(body);
-                    }
-                });
+            self.api.get('slides/overview').then(resolve).catch(reject);
+        });
+    }
+
+    /**
+     * Get all zones in this Household
+     *
+     * @return {Promise<string>}
+     */
+    getZones() {
+        const self = this;
+        return new Promise(function (resolve, reject) {
+            self.api.get('zones').then(resolve).catch(reject);
         });
     }
 }
