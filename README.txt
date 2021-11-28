@@ -14,6 +14,7 @@ Enables the following cards to use in your flows per curtain device:
 - [Action] Toggle between open/closed curtain
 - [Action] Set position
 - [Action] Immediate motor stop
+- [Action] Trigger a re-calibration
 - [Action] Enable Touch & Go
 - [Action] Disable Touch & Go
 
@@ -21,3 +22,4 @@ Also the follwoing actions are available globally to control your zones:
 - [Action] Open all curtains in one zone
 - [Action] Close all curtains in one zone
 - [Action] Set the position for all curtains in one zone
+- [Action] Trigger a re-calibration for all curtains in one zone

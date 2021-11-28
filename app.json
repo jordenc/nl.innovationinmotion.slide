@@ -5,7 +5,7 @@
     "nl": "Slide"
   },
   "sdk": 2,
-  "version": "0.4.3",
+  "version": "0.5.0",
   "compatibility": ">=1.5.0",
   "brandColor": "#f77933",
   "author": {
@@ -17,6 +17,10 @@
       {
         "name": "Corbata.nl",
         "email": "info@corbata.nl"
+      },
+      {
+        "name": "Ruben te Bogt",
+        "email": "info@rubentebogt.nl"
       }
     ]
   },
@@ -201,6 +205,24 @@
         ]
       },
       {
+        "id": "ReCalibrate",
+        "title": {
+          "en": "Trigger a re-calibration",
+          "nl": "Start een her-calibratie"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "placeholder": {
+              "en": "Select slide",
+              "nl": "Selecteer slide"
+            },
+            "filter": "driver_id=slide"
+          }
+        ]
+      },
+      {
         "id": "OpenZone",
         "title": {
           "en": "Open all curtains in one zone",
@@ -272,6 +294,26 @@
             "label": "%",
             "labelMultiplier": 100,
             "labelDecimals": 0
+          }
+        ]
+      },
+      {
+        "id": "CalibrateZone",
+        "title": {
+          "en": "Trigger a re-calibration of all slides in one zone",
+          "nl": "Start een her-calibratie van alle gordijnen in een zone"
+        },
+        "titleFormatted": {
+          "en": "Trigger a re-calibration for all curtains in zone [[zone]]",
+          "nl": "Start een her-calibratie van alle gordijnen in zone [[zone]]"
+        },
+        "args": [
+          {
+            "name": "zone",
+            "type": "autocomplete",
+            "placeholder": {
+              "en": "Zone"
+            }
           }
         ]
       }

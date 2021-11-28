@@ -54,9 +54,16 @@ class SlideDevice
         this.homeyDevice.pos = position;
         this.homeyDevice.touch_go = touch_go;
 
-        this.homeyDevice.setCapabilityValue("windowcoverings_set", position);
-        this.homeyDevice.setCapabilityValue("curtain_position", position * 100);
-        this.homeyDevice.setCapabilityValue("touch_go_state", touch_go);
+        let capabilities = {
+            "windowcoverings_set": position,
+            "curtain_position": position * 100,
+            "touch_go_state": touch_go,
+        };
+        for (const [capabilityName, capabilityValue] of Object.entries(capabilities)) {
+            if (this.homeyDevice.getCapabilityValue(capabilityName) !== capabilityValue) {
+                this.homeyDevice.setCapabilityValue(capabilityName, capabilityValue);
+            }
+        }
 
         if (freshDevice) {
             this.homeyDevice.setCapabilityValue("windowcoverings_closed", false);
@@ -67,6 +74,18 @@ class SlideDevice
         if (position >= 0.9) {
             this.homeyDevice.setCapabilityValue("windowcoverings_closed", false);
         }
+    }
+
+    /**
+     * Use this call to trigger a re-calibration of a specific Slide
+     *
+     * @return {Promise<string>}
+     */
+    calibrate() {
+        const self = this;
+        return new Promise(function (resolve, reject) {
+            self.api.post('slide/' + self.device_data.numid + '/calibrate', {}).then(resolve, reject);
+        });
     }
 
     /**

@@ -30,10 +30,9 @@ class SlideDevice extends Homey.Device {
 
 		let ImmediateStopAction = new Homey.FlowCardAction('ImmediateStop');
 		ImmediateStopAction.register().registerRunListener((args, state) => {
-				console.log(state);
-				let slide = new Slide(Homey.ManagerSettings.get('token'), args.device.getData(), args.device);
-				return slide.immediateStop();
-			});
+			let slide = new Slide(Homey.ManagerSettings.get('token'), args.device.getData(), args.device);
+			return slide.immediateStop();
+		});
 
 		let enableTouchGoAction = new Homey.FlowCardAction('EnableTouchGo');
 		enableTouchGoAction.register().registerRunListener(async ( args, state ) => {
@@ -45,6 +44,12 @@ class SlideDevice extends Homey.Device {
 		disableTouchGoAction.register().registerRunListener(async ( args, state ) => {
 			let slide = new Slide(Homey.ManagerSettings.get('token'), args.device.getData(), args.device);
 			return slide.toggleTouchGo(false);
+		});
+
+		let ReCalibrateAction = new Homey.FlowCardAction('ReCalibrate');
+		ReCalibrateAction.register().registerRunListener((args, state) => {
+			let slide = new Slide(Homey.ManagerSettings.get('token'), args.device.getData(), args.device);
+			return slide.calibrate();
 		});
         
         //Poll the device every 30 seconds

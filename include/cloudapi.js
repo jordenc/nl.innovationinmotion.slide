@@ -40,7 +40,6 @@ class CloudApi
                 headers: self.headers,
                 json: true,
             }, function (error, response, body) {
-                console.log("CloudApi result = " + response.statusCode + " & body = " + JSON.stringify(body));
 
                 if (!error && response.statusCode === 200) {
                     resolve(body);
@@ -73,7 +72,6 @@ class CloudApi
                 body: requestData
             }, function (error, response, body) {
 
-                console.log("CloudApi result = " + response.statusCode + " & body = " + JSON.stringify(body));
                 if (!error && response.statusCode === 200) {
                     resolve(body);
                 } else {
@@ -105,7 +103,6 @@ class CloudApi
                 body: requestData
             }, function (error, response, body) {
 
-                console.log("CloudApi result = " + response.statusCode + " & body = " + JSON.stringify(body));
                 if (!error && response.statusCode === 200) {
                     resolve(body);
                 } else {

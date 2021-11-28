@@ -16,6 +16,18 @@ class SlideZone
     }
 
     /**
+     * Use this call to trigger a re-calibration for all Slides in this specific zone
+     *
+     * @return {Promise<string>}
+     */
+    calibrate() {
+        const self = this;
+        return new Promise(function (resolve, reject) {
+            self.api.post('zones/' + self.zone_id + '/calibrate', {}).then(resolve, reject);
+        });
+    }
+
+    /**
      * Set position for all Slides in this specific zone
      *
      * @param value

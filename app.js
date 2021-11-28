@@ -26,6 +26,12 @@ class App extends Homey.App {
 			let zone = new SlideZone(Homey.ManagerSettings.get('token'), args.zone.id);
 			return zone.setPosition(args.windowcoverings_set);
 		}).getArgument('zone').registerAutocompleteListener(this.zoneAutocompleteListener.bind(this));
+
+		let CalibrateZoneAction = new Homey.FlowCardAction('CalibrateZone');
+		CalibrateZoneAction.register().registerRunListener((args, state) => {
+			let zone = new SlideZone(Homey.ManagerSettings.get('token'), args.zone.id);
+			return zone.calibrate();
+		}).getArgument('zone').registerAutocompleteListener(this.zoneAutocompleteListener.bind(this));
 	}
 
 	/**
