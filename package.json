@@ -1,0 +1,30 @@
+{
+  "name": "nl.innovationinmotion.slide",
+  "version": "0.5.0",
+  "description": "Control your curtains with Slide by Innovation In Motion (https://innovationinmotion.nl/), using Homey by Athom B.V.",
+  "main": "app.js",
+  "dependencies": {
+    "homey": "^2.20.6",
+    "request": "2.88.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jordenc/nl.innovationinmotion.slide.git"
+  },
+  "keywords": [
+    "slide",
+    "curtain",
+    "curtains",
+    "homey",
+    "innovationinmotion"
+  ],
+  "author": "Innovation In Motion <support@slide.store> (https://innovationinmotion.nl)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jordenc/nl.innovationinmotion.slide/issues"
+  },
+  "homepage": "https://github.com/jordenc/nl.innovationinmotion.slide#readme"
+}

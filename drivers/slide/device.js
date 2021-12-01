@@ -1,208 +1,144 @@
 'use strict';
 
 const Homey = require('homey');
-let request	= require('request');
+let Slide	= require('../../include/slidedevice');
 
 class SlideDevice extends Homey.Device {
 
-    // this method is called when the Device is inited
-    onInit() {
-        this.log('device init');
-        this.log('name:', this.getName());
-        this.log('class:', this.getClass());
+	/**
+	 * This method is called when the Device is inited
+	 */
+	onInit() {
+        this.log('Device init');
+        this.log('Device name:', this.getName());
+        this.log('Device class:', this.getClass());
+
+        const capabilitiesToRegister = [
+			"windowcoverings_closed",
+			"windowcoverings_set",
+			"curtain_position",
+			"touch_go_state",
+		];
+		capabilitiesToRegister.forEach(capability => {
+			if (!this.hasCapability(capability)) {
+				this.addCapability(capability);
+			}
+		});
 
         this.registerCapabilityListener('windowcoverings_set', this.onCapabilitySet.bind(this));
-        
-        var device_data = this.getData();
+        this.registerCapabilityListener('windowcoverings_closed', this.onCapabilitySet.bind(this));
 
 		let ImmediateStopAction = new Homey.FlowCardAction('ImmediateStop');
-		ImmediateStopAction
-			.register()
-			.registerRunListener((args, state) => {
-				
-				var token = Homey.ManagerSettings.get('token');
-				var device_data = this.getData();
-				
-				console.log('stop ' +  device_data.numid + ' met token ' + token);
-			  
-				request(
-				  {
-				  	method: "post",
-				  	url: 'https://api.goslide.io/api/slide/' + device_data.numid + '/stop',
-				    headers: {  
-						"content-type": "application/json",
-						"Authorization": 'Bearer ' + token
-					},
-				  	json: true
-				  },
-				  function (error, response, body) {
-					  
-					  console.log ("result = " + response.statusCode + " & body = " + JSON.stringify (body));
-					  
-					  if (!error && response.statusCode == 200) {
-						
-						return Promise.resolve( true );
-						  
-					} else {
-						  
-						return Promise.resolve( false );
-						  
-					}
-				  }
-				);
-				
-			});
+		ImmediateStopAction.register().registerRunListener((args, state) => {
+			let slide = new Slide(Homey.ManagerSettings.get('token'), args.device.getData(), args.device);
+			return slide.immediateStop();
+		});
+
+		let enableTouchGoAction = new Homey.FlowCardAction('EnableTouchGo');
+		enableTouchGoAction.register().registerRunListener(async ( args, state ) => {
+			let slide = new Slide(Homey.ManagerSettings.get('token'), args.device.getData(), args.device);
+			return slide.toggleTouchGo(true);
+		});
+
+		let disableTouchGoAction = new Homey.FlowCardAction('DisableTouchGo');
+		disableTouchGoAction.register().registerRunListener(async ( args, state ) => {
+			let slide = new Slide(Homey.ManagerSettings.get('token'), args.device.getData(), args.device);
+			return slide.toggleTouchGo(false);
+		});
+
+		let ReCalibrateAction = new Homey.FlowCardAction('ReCalibrate');
+		ReCalibrateAction.register().registerRunListener((args, state) => {
+			let slide = new Slide(Homey.ManagerSettings.get('token'), args.device.getData(), args.device);
+			return slide.calibrate();
+		});
         
         //Poll the device every 30 seconds
-	    this._StatusInterval = setInterval(this.check_status.bind(this), 30000);
-		this.check_status();
-		
+		this.startPolling(0);
     }
 
-    // this method is called when the Device is added
-    onAdded() {
-        this.log('device added');
-        
-        var device_data = this.getData();
-
-		if (device_data.pos < 0) device_data.pos = 0;
-		if (device_data.pos > 1) device_data.pos = 1;
-        this.setCapabilityValue ("windowcoverings_set", 1 - device_data.pos);
-        
+	/**
+	 * This method is called when the Device is added
+	 *
+	 * @return void
+	 */
+	onAdded() {
+        this.log('Device added');
+		let device_data = this.getData();
+		let slide = new Slide(Homey.ManagerSettings.get('token'), this.getData(), this);
+		slide.saveStateToHomey(device_data.pos, device_data.touch_go, device_data.calib_time, true);
     }
 
-    // this method is called when the Device is deleted
-    onDeleted() {
-        this.log('device deleted');
-        clearInterval(this._StatusInterval);
+	/**
+	 * This method is called when the Device is deleted
+	 *
+	 * @return void
+	 */
+	onDeleted() {
+        this.log('Device deleted');
+        this.stopPolling();
     }
-    
-    async onCapabilitySet (value, opts) {
-	    
-	    this.log("opts = " + JSON.stringify (opts));
-	    
-	 	//this.log("callback = " + JSON.stringify (callback));
-	    
-	    this.log ("DIM value = " + JSON.stringify (value));
-	 	
-	 	if (value < 0 || value > 1) {
-		 	
+
+	/**
+	 * Capability listener for windowcoverings_set and windowcoverings_closed
+	 *
+	 * @param value
+	 * @param opts
+	 * @return {Promise<string>}
+	 */
+	async onCapabilitySet (value, opts) {
+		if (value === false) {
+			value = 1.00;
+		}
+		if (value === true) {
+			value = 0.00;
+		}
+		if (value < 0 || value > 1) {
 		 	return Promise.reject( new Error('Value must be between 0.00 and 1.00 (' + value + ')') );
-		 	
-	 	} else {
-	 	
-	 		var requestData = {"pos":  1 - value}
-	 		var device_data = this.getData();
-	 		var token = Homey.ManagerSettings.get('token');
-	 		
-	 		this.log("requestData = " + JSON.stringify(requestData));
-	 		
-	 		//console.log ('slide ' + device_data.numid + ' moven met token ' + token);
-	 		
-	    	request({
-			    url: 'https://api.goslide.io/api/slide/' + device_data.numid + '/position',
-			    method: "POST",
-			    headers: {  
-					"content-type": "application/json",
-					"Authorization": 'Bearer ' + token
-				},
-			    json: true,
-			    body: requestData
-			},
-			function (error, response, body) {
-				
-				if (typeof response !== 'undefined' && typeof response.statusCode !== 'undefined') {
-					
-			        if (response.statusCode === 200) {
-			            
-			            console.log("response.statusCode: " + response.statusCode)
-			            console.log("body = " + JSON.stringify (body));
-			            
-			            if (body.data.response == "success") {
-				         
-						 	console.log("return TRUE");
-							//Promise.resolve(true);
-							return Promise.resolve();
-				         	
-				        } else {
-					     
-						 	console.log("return FALSE");
-					     	//return Promise.resolve( false );
-							return callback(body.error)
-					        
-					    }
-			            
-			        }
-			        else {
-			
-			            console.log("error: " + error)
-			            return Promise.resolve( false );
-			            
-			        }
-			        
-			    }
-		    })
-			
-	    }
-	    
-    }
-    
-    check_status () {
-	    
-	    var device_data = this.getData();
-	    var token = Homey.ManagerSettings.get('token');
-	    
-	    console.log ("check status of " + device_data.numid + "...");
-	    
-	    
-	    var thisdevice = this;
-	    
-	    request({
-			url: 'https://api.goslide.io/api/slide/' + device_data.numid + "/info",
-			method: "get",
-			headers: {  
-				"content-type": "application/json",
-				"Authorization": 'Bearer ' + token
-			},
-			json: true
-		},
-		function (error, response, body) {
-			
-			//console.log("response =  " + JSON.stringify(response));
-			//console.log("body = " + JSON.stringify (body));
-	        
-	        if (typeof response !== 'undefined' && typeof response.statusCode !== 'undefined') {
-		        
-		        if (response.statusCode === 200) {
-			        
-			       	try {
-			        
-				   		//var result = JSON.parse(body);
-		            
-			            if (body.data.pos < 0) body.data.pos = 0;
-			            if (body.data.pos > 1) body.data.pos = 1;
-			            
-			            console.log("UPDATE dim status naar " + body.data.pos);
-			            thisdevice.setCapabilityValue ("windowcoverings_set", 1 - body.data.pos);
-			        
-			        } catch (e) {
-				        
-				        console.log ("Error while retrieving status: " + e);
-				        
-			        }
-		            
-		        } else {
-		
-		            console.log("error: " + error)
-		            //console.log("response.statusCode: " + response.statusCode)
-		            console.log("response.statusText: " + response.statusText)
-		        }
-	        
-	        }
-	    })
-	    
+	 	}
+		// Clear interval to prevent updates during position changes
+		this.stopPolling();
+
+		let slide = new Slide(Homey.ManagerSettings.get('token'), this.getData(), this);
+		return slide.setPosition(value).then(() => {
+			this.startPolling(this.calib_time + 3000); // Start polling the device again after motor is done
+		}).catch(err => {
+			this.log(err);
+		});
     }
 
+	/**
+	 * Start polling for status updates for device every 30 seconds
+	 *
+	 * @param timeout
+	 * @return void
+	 */
+    startPolling(timeout) {
+		let polling = () => {
+			this.checkStatus().then(() => {
+				this.timer = setInterval(this.checkStatus.bind(this), 30000);
+			});
+		};
+		setTimeout(polling, timeout);
+	}
+
+	/**
+	 * Stop polling for status updates for device
+	 *
+	 * @return void
+	 */
+	stopPolling() {
+		if (this.timer) {
+			clearInterval(this.timer);
+		}
+	}
+
+	/**
+	 * Check status and update device
+	 */
+	checkStatus () {
+		let slide = new Slide(Homey.ManagerSettings.get('token'), this.getData(), this);
+		return slide.getState();
+    }
 }
 
 module.exports = SlideDevice;
