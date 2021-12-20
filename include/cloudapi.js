@@ -44,7 +44,15 @@ class CloudApi
                 if (!error && response.statusCode === 200) {
                     resolve(body);
                 } else {
-                    reject(new Error(body.message));
+                    if (typeof body !== "undefined" && body.message) {
+                        console.error('CloudApi get API error:', body.message);
+                        reject(new Error(body.message));
+                    } else if(error) {
+                        console.error('CloudApi get HTTP error:', error);
+                        reject(error);
+                    } else {
+                        reject(new Error('CloudApi get unknown error'));
+                    }
                 }
             });
         });
@@ -75,7 +83,15 @@ class CloudApi
                 if (!error && response.statusCode === 200) {
                     resolve(body);
                 } else {
-                    reject(new Error(body.message));
+                    if (typeof body !== "undefined" && body.message) {
+                        console.error('CloudApi post API error:', body.message);
+                        reject(new Error(body.message));
+                    } else if(error) {
+                        console.error('CloudApi post HTTP error:', error);
+                        reject(error);
+                    } else {
+                        reject(new Error('CloudApi post unknown error'));
+                    }
                 }
             });
         });
@@ -106,7 +122,15 @@ class CloudApi
                 if (!error && response.statusCode === 200) {
                     resolve(body);
                 } else {
-                    reject(new Error(body.message));
+                    if (typeof body !== "undefined" && body.message) {
+                        console.error('CloudApi patch API error:', body.message);
+                        reject(new Error(body.message));
+                    } else if(error) {
+                        console.error('CloudApi patch HTTP error:', error);
+                        reject(error);
+                    } else {
+                        reject(new Error('CloudApi patch unknown error'));
+                    }
                 }
             });
         });
