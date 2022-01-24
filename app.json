@@ -239,6 +239,10 @@
             "type": "autocomplete",
             "placeholder": {
               "en": "Zone"
+            },
+            "title": {
+              "en": "Search for zone",
+              "nl": "Zoek naar zone"
             }
           }
         ]
@@ -259,6 +263,10 @@
             "type": "autocomplete",
             "placeholder": {
               "en": "Zone"
+            },
+            "title": {
+              "en": "Search for zone",
+              "nl": "Zoek naar zone"
             }
           }
         ]
@@ -283,6 +291,10 @@
             "type": "autocomplete",
             "placeholder": {
               "en": "Zone"
+            },
+            "title": {
+              "en": "Search for zone",
+              "nl": "Zoek naar zone"
             }
           },
           {
@@ -294,7 +306,11 @@
             "value": 0.5,
             "label": "%",
             "labelMultiplier": 100,
-            "labelDecimals": 0
+            "labelDecimals": 0,
+            "title": {
+              "en": "Percentage",
+              "nl": "Percentage"
+            }
           }
         ]
       },
@@ -314,6 +330,10 @@
             "type": "autocomplete",
             "placeholder": {
               "en": "Zone"
+            },
+            "title": {
+              "en": "Search for zone",
+              "nl": "Zoek naar zone"
             }
           }
         ]
