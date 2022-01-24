@@ -45,19 +45,17 @@ class App extends Homey.App {
 		this.household = new SlideHousehold(this.homey.settings.get('token'));
 
 		return this.household.getZones().then(body => {
-			var results = [];
+			var zones = [];
 			Object.values(body.data).forEach(function (zone) {
-				results.push({
+				zones.push({
 					name: zone.name,
 					id: zone.id,
 				});
 			});
 
-			console.log('return results = ' + JSON.stringify(results));
-
 			// filter based on the query
-			return results.filter((result) => {
-				return result.name.toLowerCase().includes(query.toLowerCase());
+			return zones.filter((zone) => {
+				return zone.name.toLowerCase().includes(query.toLowerCase());
 			});
 		});
 	}
