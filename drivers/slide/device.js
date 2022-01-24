@@ -8,7 +8,7 @@ class SlideDevice extends Homey.Device {
 	/**
 	 * This method is called when the Device is inited
 	 */
-	onInit() {
+	async onInit() {
         this.log('Device init');
         this.log('Device name:', this.getName());
         this.log('Device class:', this.getClass());
@@ -28,28 +28,28 @@ class SlideDevice extends Homey.Device {
         this.registerCapabilityListener('windowcoverings_set', this.onCapabilitySet.bind(this));
         this.registerCapabilityListener('windowcoverings_closed', this.onCapabilitySet.bind(this));
 
-		let ImmediateStopAction = new Homey.FlowCardAction('ImmediateStop');
-		ImmediateStopAction.register().registerRunListener((args, state) => {
-			let slide = new Slide(Homey.ManagerSettings.get('token'), args.device.getData(), args.device);
-			return slide.immediateStop();
+		this.ImmediateStopAction = this.homey.flow.getActionCard('ImmediateStop');
+		this.ImmediateStopAction.registerRunListener(async (args, state) => {
+			this.slide = new Slide(this.homey.settings.get('token'), args.device.getData(), args.device);
+			return this.slide.immediateStop();
 		});
 
-		let enableTouchGoAction = new Homey.FlowCardAction('EnableTouchGo');
-		enableTouchGoAction.register().registerRunListener(async ( args, state ) => {
-			let slide = new Slide(Homey.ManagerSettings.get('token'), args.device.getData(), args.device);
-			return slide.toggleTouchGo(true);
+		this.enableTouchGoAction = this.homey.flow.getActionCard('EnableTouchGo');
+		this.enableTouchGoAction.registerRunListener(async ( args, state ) => {
+			this.slide = new Slide(this.homey.settings.get('token'), args.device.getData(), args.device);
+			return this.slide.toggleTouchGo(true);
 		});
 
-		let disableTouchGoAction = new Homey.FlowCardAction('DisableTouchGo');
-		disableTouchGoAction.register().registerRunListener(async ( args, state ) => {
-			let slide = new Slide(Homey.ManagerSettings.get('token'), args.device.getData(), args.device);
-			return slide.toggleTouchGo(false);
+		this.disableTouchGoAction = this.homey.flow.getActionCard('DisableTouchGo');
+		this.disableTouchGoAction.registerRunListener(async ( args, state ) => {
+			this.slide = new Slide(this.homey.settings.get('token'), args.device.getData(), args.device);
+			return this.slide.toggleTouchGo(false);
 		});
 
-		let ReCalibrateAction = new Homey.FlowCardAction('ReCalibrate');
-		ReCalibrateAction.register().registerRunListener((args, state) => {
-			let slide = new Slide(Homey.ManagerSettings.get('token'), args.device.getData(), args.device);
-			return slide.calibrate();
+		this.ReCalibrateAction = this.homey.flow.getActionCard('ReCalibrate');
+		this.ReCalibrateAction.registerRunListener(async (args, state) => {
+			this.slide = new Slide(this.homey.settings.get('token'), args.device.getData(), args.device);
+			return this.slide.calibrate();
 		});
         
         //Poll the device every 30 seconds
@@ -61,11 +61,11 @@ class SlideDevice extends Homey.Device {
 	 *
 	 * @return void
 	 */
-	onAdded() {
+	async onAdded() {
         this.log('Device added');
-		let device_data = this.getData();
-		let slide = new Slide(Homey.ManagerSettings.get('token'), this.getData(), this);
-		slide.saveStateToHomey(device_data.pos, device_data.touch_go, device_data.calib_time, true);
+		this.device_data = this.getData();
+		this.slide = new Slide(this.homey.settings.get('token'), this.getData(), this);
+		slide.saveStateToHomey(this.device_data.pos, this.device_data.touch_go, this.device_data.calib_time, true);
     }
 
 	/**
@@ -73,7 +73,7 @@ class SlideDevice extends Homey.Device {
 	 *
 	 * @return void
 	 */
-	onDeleted() {
+	async onDeleted() {
         this.log('Device deleted');
         this.stopPolling();
     }
@@ -98,8 +98,8 @@ class SlideDevice extends Homey.Device {
 		// Clear interval to prevent updates during position changes
 		this.stopPolling();
 
-		let slide = new Slide(Homey.ManagerSettings.get('token'), this.getData(), this);
-		return slide.setPosition(value).then(() => {
+		this.slide = new Slide(this.homey.settings.get('token'), this.getData(), this);
+		return this.slide.setPosition(value).then(() => {
 			this.startPolling(this.calib_time + 3000); // Start polling the device again after motor is done
 		}).catch(err => {
 			this.log(err);
@@ -136,8 +136,8 @@ class SlideDevice extends Homey.Device {
 	 * Check status and update device
 	 */
 	checkStatus () {
-		let slide = new Slide(Homey.ManagerSettings.get('token'), this.getData(), this);
-		return slide.getState();
+		this.slide = new Slide(this.homey.settings.get('token'), this.getData(), this);
+		return this.slide.getState();
     }
 }
 

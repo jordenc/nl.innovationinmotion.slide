@@ -11,19 +11,19 @@ class SlideDriver extends Homey.Driver {
 	 *
 	 * @param socket
 	 */
-	onPair(socket) {
+	async onPair(socket) {
       
 	      socket.on('login', (data, callback) => {
 		      var slideAuth = new SlideAuth();
 		      slideAuth.login(data.username, data.password).then(result => {
 
-				  Homey.ManagerSettings.set('username', data.username);
-				  Homey.ManagerSettings.set('password', data.password);
+				  this.homey.settings.set('username', data.username);
+				  this.homey.settings.set('password', data.password);
 
 				  var token = result.access_token;
 
-				  Homey.ManagerSettings.set('token', token);
-				  Homey.ManagerSettings.set('token_expires', result.expires_at);
+				  this.homey.settings.set('token', token);
+				  this.homey.settings.set('token_expires', result.expires_at);
 
 				  var slideHouseHold = new SlideHousehold(token);
 				  slideHouseHold.getOverview().then(result => {
@@ -67,7 +67,7 @@ class SlideDriver extends Homey.Driver {
 	/**
 	 * Driver initialisation done
 	 */
-	onInit() {
+	async onInit() {
 		  this.log("Driver initialisation done");
 		  this.timer = setInterval(this.checkToken.bind(this), 86400000);
 		  this.checkToken();
@@ -76,9 +76,9 @@ class SlideDriver extends Homey.Driver {
 	/**
 	 * Checks if access token is still valid
 	 */
-	checkToken() {
+	async checkToken() {
 
-		var expires = Homey.ManagerSettings.get('token_expires');
+		var expires = this.homey.settings.get('token_expires');
 		var expire_date = new Date(expires);
 		var expireDate = expire_date.getTime();
 
@@ -89,16 +89,16 @@ class SlideDriver extends Homey.Driver {
 
 		if (newDate > expireDate) {
 
-			var username = Homey.ManagerSettings.get('username');
-			var password = Homey.ManagerSettings.get('password');
+			var username = this.homey.settings.get('username');
+			var password = this.homey.settings.get('password');
 
 			if (username && password) {
 
 				var slideAuth = new SlideAuth();
 				slideAuth.login(username, password).then(result => {
 
-					Homey.ManagerSettings.set('token', result.access_token);
-					Homey.ManagerSettings.set('token_expires', result.expires_at)
+					this.homey.settings.set('token', result.access_token);
+					this.homey.settings.set('token_expires', result.expires_at)
 
 				}).catch(err => {
 					this.log(err);
