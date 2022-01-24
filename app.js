@@ -1,37 +1,37 @@
 "use strict";
 
 const Homey = require('homey');
-let SlideZone = require('./include/slidezone');
-let SlideHousehold = require('./include/slidehousehold');
+const SlideZone = require('./include/slidezone');
+const SlideHousehold = require('./include/slidehousehold');
 
 class App extends Homey.App {
 	
-	onInit() {
+	async onInit() {
 		this.log('Slide App init');
 
-		let OpenZoneAction = new Homey.FlowCardAction('OpenZone');
-		OpenZoneAction.register().registerRunListener((args, state) => {
-			let zone = new SlideZone(Homey.ManagerSettings.get('token'), args.zone.id);
-			return zone.setPosition(1);
-		}).getArgument('zone').registerAutocompleteListener(this.zoneAutocompleteListener.bind(this));
+		this.OpenZoneAction = this.homey.flow.getActionCard('OpenZone');
+		this.OpenZoneAction.registerRunListener(async (args, state) => {
+			this.zone = new SlideZone(this.homey.settings.get('token'), args.zone.id);
+			return this.zone.setPosition(1);
+		}).registerArgumentAutocompleteListener("zone", this.zoneAutocompleteListener.bind(this));
 
-		let CloseZoneAction = new Homey.FlowCardAction('CloseZone');
-		CloseZoneAction.register().registerRunListener((args, state) => {
-			let zone = new SlideZone(Homey.ManagerSettings.get('token'), args.zone.id);
-			return zone.setPosition(0);
-		}).getArgument('zone').registerAutocompleteListener(this.zoneAutocompleteListener.bind(this));
+		this.OpenZoneAction = this.homey.flow.getActionCard('CloseZone');
+		this.OpenZoneAction.registerRunListener(async (args, state) => {
+			this.zone = new SlideZone(this.homey.settings.get('token'), args.zone.id);
+			return this.zone.setPosition(0);
+		}).registerArgumentAutocompleteListener("zone", this.zoneAutocompleteListener.bind(this));
 
-		let SetZoneAction = new Homey.FlowCardAction('SetZone');
-		SetZoneAction.register().registerRunListener((args, state) => {
-			let zone = new SlideZone(Homey.ManagerSettings.get('token'), args.zone.id);
-			return zone.setPosition(args.windowcoverings_set);
-		}).getArgument('zone').registerAutocompleteListener(this.zoneAutocompleteListener.bind(this));
+		this.SetZoneAction = this.homey.flow.getActionCard('SetZone');
+		this.SetZoneAction.registerRunListener(async (args, state) => {
+			this.zone = new SlideZone(this.homey.settings.get('token'), args.zone.id);
+			return this.zone.setPosition(args.windowcoverings_set);
+		}).registerArgumentAutocompleteListener("zone", this.zoneAutocompleteListener.bind(this));
 
-		let CalibrateZoneAction = new Homey.FlowCardAction('CalibrateZone');
-		CalibrateZoneAction.register().registerRunListener((args, state) => {
-			let zone = new SlideZone(Homey.ManagerSettings.get('token'), args.zone.id);
-			return zone.calibrate();
-		}).getArgument('zone').registerAutocompleteListener(this.zoneAutocompleteListener.bind(this));
+		this.CalibrateZoneAction = this.homey.flow.getActionCard('CalibrateZone');
+		this.CalibrateZoneAction.registerRunListener(async (args, state) => {
+			this.zone = new SlideZone(this.homey.settings.get('token'), args.zone.id);
+			return this.zone.calibrate();
+		}).registerArgumentAutocompleteListener ("zone", this.zoneAutocompleteListener.bind(this));
 	}
 
 	/**
@@ -41,19 +41,24 @@ class App extends Homey.App {
 	 * @param args
 	 * @return {Promise<[{some_value_for_myself: string, icon: string, name: string, description: string}, {}]>}
 	 */
-	zoneAutocompleteListener(query, args) {
-		return new Promise(function (resolve, reject) {
-			let household = new SlideHousehold(Homey.ManagerSettings.get('token'));
-			household.getZones().then(body => {
-				let zones = [];
-				Object.values(body.data).forEach(function (zone) {
-					zones.push({
-						id: zone.id,
-						name: zone.name,
-					});
+	async zoneAutocompleteListener(query, args) {
+		this.household = new SlideHousehold(this.homey.settings.get('token'));
+
+		return this.household.getZones().then(body => {
+			var results = [];
+			Object.values(body.data).forEach(function (zone) {
+				results.push({
+					name: zone.name,
+					id: zone.id,
 				});
-				resolve(zones);
-			}).catch(reject);
+			});
+
+			console.log('return results = ' + JSON.stringify(results));
+
+			// filter based on the query
+			return results.filter((result) => {
+				return result.name.toLowerCase().includes(query.toLowerCase());
+			});
 		});
 	}
 }
