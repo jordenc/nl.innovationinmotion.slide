@@ -1,9 +1,10 @@
 "use strict";
 
 const Homey = require('homey');
-let SlideAuth = require('../../include/slideauth');
-let SlideHousehold = require('../../include/slidehousehold');
+const SlideAuth = require('../../include/slideauth');
+const SlideHousehold = require('../../include/slidehousehold');
 let devices = [];
+let token = '';
 
 class SlideDriver extends Homey.Driver {
 
@@ -11,67 +12,95 @@ class SlideDriver extends Homey.Driver {
 	 *
 	 * @param socket
 	 */
-	async onPair(socket) {
-      
-	      socket.on('login', (data, callback) => {
-		      var slideAuth = new SlideAuth();
-		      slideAuth.login(data.username, data.password).then(result => {
+	async onPair(session) {
 
-				  this.homey.settings.set('username', data.username);
-				  this.homey.settings.set('password', data.password);
+		let username = "";
+		let password = "";
 
-				  var token = result.access_token;
+		session.setHandler('login', async (data) => {
 
-				  this.homey.settings.set('token', token);
-				  this.homey.settings.set('token_expires', result.expires_at);
+			username = data.username;
+			password = data.password;
 
-				  var slideHouseHold = new SlideHousehold(token);
-				  slideHouseHold.getOverview().then(result => {
-					  result.slides.forEach(function (device) {
-						  devices.push({
-								  data: {
-									  id: device.device_id,
-									  numid: device.id,
-									  name: device.device_name,
-									  calib_time: 30000,
-									  slide_setup: device.slide_setup,
-									  household_id: device.household_id,
-									  zone_id: device.zone_id,
-									  touch_go: device.touch_go,
-									  pos: device.device_info.pos,
-								  },
-								  name: device.device_name
-							  });
-					  });
-					  callback(null, devices);
+			var slideAuth = new SlideAuth();
+			const credentialsAreValid = await slideAuth.login(data.username, data.password).then(result => {
 
-				  }).catch(err => {
-				  	this.log(err);
-				  })
+				this.homey.settings.set('username', data.username);
+				this.homey.settings.set('password', data.password);
 
-			  }).catch(message => {
-			  	callback(message);
-			  	this.log(message);
-			  });
-	      });
+				var token = result.access_token;
 
-	      socket.on('list_devices', function(data, callback) {
-			  // emit when devices are still being searched
-			  socket.emit('list_devices', devices);
+				this.homey.settings.set('token', token);
+				this.homey.settings.set('token_expires', result.expires_at);
 
-			  // fire the callback when searching is done
-			  callback(null, devices);
-	      });
-	  }
+				return true;
+
+			}).catch(message => {
+				this.log(message);
+				return false;
+			});
+
+			return credentialsAreValid;
+
+		});
+
+		session.setHandler('list_devices', async () => {
+
+			//const api = await DeviceAPI.login({ username, password });
+			//const api = await SlideDriver.login({ username, password });
+
+			var slideAuth = new SlideAuth();
+			return slideAuth.login(username, password).then(result => {
+
+				var token = result.access_token;
+
+				this.homey.settings.set('token', token);
+				this.homey.settings.set('token_expires', result.expires_at);
+
+				var slideHouseHold = new SlideHousehold(token);
+
+				return slideHouseHold.getOverview().then(result => {
+
+					result.slides.forEach(function (device) {
+						devices.push({
+							data: {
+								id: device.device_id,
+								numid: device.id,
+								name: device.device_name,
+								calib_time: 30000,
+								slide_setup: device.slide_setup,
+								household_id: device.household_id,
+								zone_id: device.zone_id,
+								touch_go: device.touch_go,
+								pos: device.device_info.pos,
+							},
+							name: device.device_name
+						});
+					});
+
+					return devices;
+
+				}).catch(err => {
+					this.log(err);
+					return false;
+				});
+
+			}).catch(message => {
+				this.log(message);
+				return false;
+			});
+
+		});
+	}
 
 	/**
 	 * Driver initialisation done
 	 */
 	async onInit() {
-		  this.log("Driver initialisation done");
-		  this.timer = setInterval(this.checkToken.bind(this), 86400000);
-		  this.checkToken();
-	  }
+		this.log("Driver initialisation done");
+		this.timer = setInterval(this.checkToken.bind(this), 86400000);
+		this.checkToken();
+	}
 
 	/**
 	 * Checks if access token is still valid
@@ -110,7 +139,9 @@ class SlideDriver extends Homey.Driver {
 		} else {
 			this.log("Token is still valid for more than 14 days");
 		}
+
 	}
+
 }
 	  
 module.exports = SlideDriver;
