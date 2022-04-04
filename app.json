@@ -5,7 +5,7 @@
     "nl": "Slide"
   },
   "sdk": 3,
-  "version": "1.0.4",
+  "version": "1.0.5",
   "compatibility": ">=5.0.0",
   "platforms": ["local", "cloud"],
   "brandColor": "#f77933",
@@ -42,8 +42,8 @@
   "support": "mailto:support@slide.store",
   "homeyCommunityTopicId": 11915,
   "images": {
-    "large": "./assets/images/large.jpg",
-    "small": "./assets/images/small.jpg"
+    "large": "./assets/images/large.png",
+    "small": "./assets/images/small.png"
   },
   "tags": {
     "en": [
