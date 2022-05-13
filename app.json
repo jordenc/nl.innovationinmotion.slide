@@ -5,7 +5,7 @@
     "nl": "Slide"
   },
   "sdk": 3,
-  "version": "1.0.5",
+  "version": "1.0.6",
   "compatibility": ">=5.0.0",
   "platforms": ["local", "cloud"],
   "brandColor": "#f77933",
@@ -154,7 +154,7 @@
       {
         "id": "ImmediateStop",
         "title": {
-          "en": "Immediate motor stop",
+          "en": "Stop immediately"",
           "nl": "Stop motor direct"
         },
         "args": [

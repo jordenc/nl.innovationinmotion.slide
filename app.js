@@ -57,6 +57,8 @@ class App extends Homey.App {
 			return zones.filter((zone) => {
 				return zone.name.toLowerCase().includes(query.toLowerCase());
 			});
+		}).catch(err => {
+			this.log(err);
 		});
 	}
 }
