@@ -4,5 +4,8 @@
   },
   "1.0.5": {
     "en": "Updated images"
+  },
+  "1.0.6": {
+    "en": "SDK v3 version with new functions (immediate stop, enable/disable touch&go, recalibrate)"
   }
 }
