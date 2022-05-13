@@ -118,6 +118,8 @@ class SlideDevice
                     }
                 }, message => {
                     reject(message);
+                }).catch(message => {
+                    reject(message);
                 });
         });
     }
@@ -133,10 +135,14 @@ class SlideDevice
         return new Promise(function (resolve, reject) {
             self.api.patch('slide/' + self.device_data.numid,{"touch_go": value})
                 .then(body => {
-                    if (body.data.response === 'success') {
+                    if (body.message === 'Slide was successfully updated. ') {
+                        
+                        console.log("toggleTouchGo success: "  + value);
                         self.homeyDevice.setCapabilityValue("touch_go_state", value);
                         resolve();
                     } else {
+                        
+                        console.log("toggleTouchGo reject", body);
                         reject();
                     }
                 }).catch(message => {

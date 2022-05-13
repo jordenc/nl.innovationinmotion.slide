@@ -116,6 +116,8 @@ class SlideDevice extends Homey.Device {
 		let polling = () => {
 			this.checkStatus().then(() => {
 				this.timer = setInterval(this.checkStatus.bind(this), 30000);
+			}).catch(err => {
+				this.log(err);
 			});
 		};
 		setTimeout(polling, timeout);

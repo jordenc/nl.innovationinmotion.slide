@@ -154,7 +154,7 @@
       {
         "id": "ImmediateStop",
         "title": {
-          "en": "Stop immediately"",
+          "en": "Stop immediately",
           "nl": "Stop motor direct"
         },
         "args": [
