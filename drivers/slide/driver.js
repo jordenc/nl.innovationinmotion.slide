@@ -3,8 +3,6 @@
 const Homey = require('homey');
 const SlideAuth = require('../../include/slideauth');
 const SlideHousehold = require('../../include/slidehousehold');
-let devices = [];
-let token = '';
 
 class SlideDriver extends Homey.Driver {
 
@@ -28,9 +26,9 @@ class SlideDriver extends Homey.Driver {
 				this.homey.settings.set('username', data.username);
 				this.homey.settings.set('password', data.password);
 
-				var token = result.access_token;
+				this.token = result.access_token;
 
-				this.homey.settings.set('token', token);
+				this.homey.settings.set('token', this.token);
 				this.homey.settings.set('token_expires', result.expires_at);
 
 				return true;
@@ -49,17 +47,21 @@ class SlideDriver extends Homey.Driver {
 			//const api = await DeviceAPI.login({ username, password });
 			//const api = await SlideDriver.login({ username, password });
 
+			var devices = [];
+
 			var slideAuth = new SlideAuth();
 			return slideAuth.login(username, password).then(result => {
+				
+				this.token = result.access_token;
 
-				var token = result.access_token;
-
-				this.homey.settings.set('token', token);
+				this.homey.settings.set('token', this.token);
 				this.homey.settings.set('token_expires', result.expires_at);
 
-				var slideHouseHold = new SlideHousehold(token);
+				var slideHouseHold = new SlideHousehold(this.token);
 
 				return slideHouseHold.getOverview().then(result => {
+
+					console.log(result.slides);
 
 					result.slides.forEach(function (device) {
 						devices.push({
