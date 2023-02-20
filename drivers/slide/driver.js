@@ -51,7 +51,7 @@ class SlideDriver extends Homey.Driver {
 
 			var slideAuth = new SlideAuth();
 			return slideAuth.login(username, password).then(result => {
-				
+
 				this.token = result.access_token;
 
 				this.homey.settings.set('token', this.token);
