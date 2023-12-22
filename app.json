@@ -5,9 +5,12 @@
     "nl": "Slide"
   },
   "sdk": 3,
-  "version": "1.0.6",
+  "version": "1.0.7",
   "compatibility": ">=5.0.0",
-  "platforms": ["local", "cloud"],
+  "platforms": [
+    "local",
+    "cloud"
+  ],
   "brandColor": "#f77933",
   "author": {
     "name": "Corbata",
@@ -95,7 +98,10 @@
         "en": "Slide",
         "nl": "Slide"
       },
-      "platforms": ["local", "cloud"],
+      "platforms": [
+        "local",
+        "cloud"
+      ],
       "images": {
         "large": "drivers/slide/assets/images/large.jpg",
         "small": "drivers/slide/assets/images/small.jpg"

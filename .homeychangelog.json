@@ -7,5 +7,8 @@
   },
   "1.0.6": {
     "en": "SDK v3 version with new functions (immediate stop, enable/disable touch&go, recalibrate)"
+  },
+  "1.0.7": {
+    "en": "Fix for Homey Bridge, updated Readme"
   }
 }
