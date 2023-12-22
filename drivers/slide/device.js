@@ -112,10 +112,10 @@ class SlideDevice extends Homey.Device {
 	 * @param timeout
 	 * @return void
 	 */
+
     startPolling(timeout) {
 		let polling = () => {
 			this.checkStatus().then(() => {
-				//this.timer = setInterval(this.checkStatus.bind(this), 30000);
 				this.timer = setInterval(async () => {
 					// Wrap the call to this.checkStatus in an async function and await its resolution.
 					await this.checkStatus().catch(err => {
