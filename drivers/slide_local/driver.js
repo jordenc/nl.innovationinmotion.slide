@@ -27,6 +27,8 @@ class SlideLocalDriver extends Homey.Driver {
 					name: discoveryResult.txt.name,
 					data: {
 						id: discoveryResult.id,
+						ip: discoveryResult.address,
+						host: discoveryResult.host
 					},
 				};
 			});

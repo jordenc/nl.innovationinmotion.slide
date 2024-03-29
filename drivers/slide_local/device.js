@@ -1,9 +1,33 @@
 'use strict';
 
 const Homey = require('homey');
-let Slide	= require('../../include/slidedevice');
+let SlideLocal	= require('../../include/slidedevice_local');
 
 class SlideDevice extends Homey.Device {
+
+	// onDiscoveryResult(discoveryResult) {
+	// 	// Return a truthy value here if the discovery result matches your device.
+	// 	this.log("discovery found device: ", discoveryResult.id)
+	// 	return discoveryResult.id === this.getData().id;
+	// }
+	//
+	// async onDiscoveryAvailable(discoveryResult) {
+	// 	// This method will be executed once when the device has been found (onDiscoveryResult returned true)
+	// 	this.log("device became available", discoveryResult.address)
+	// 	this.api = new SlideLocal(discoveryResult.address);
+	// 	// await this.api.connect(); // When this throws, the device will become unavailable.
+	// }
+	//
+	// onDiscoveryAddressChanged(discoveryResult) {
+	// 	// Update your connection details here, reconnect when the device is offline
+	// 	this.api.address = discoveryResult.address;
+	// 	this.api.reconnect().catch(this.error);
+	// }
+	//
+	// onDiscoveryLastSeenChanged(discoveryResult) {
+	// 	// When the device is offline, try to reconnect here
+	// 	this.api.reconnect().catch(this.error);
+	// }
 
 	/**
 	 * This method is called when the Device is inited
@@ -11,6 +35,7 @@ class SlideDevice extends Homey.Device {
 	async onInit() {
         this.log('Device init');
         this.log('Device name:', this.getName());
+        this.log('Device getData():', this.getData());
         this.log('Device class:', this.getClass());
 
         const capabilitiesToRegister = [
@@ -30,25 +55,25 @@ class SlideDevice extends Homey.Device {
 
 		this.ImmediateStopAction = this.homey.flow.getActionCard('ImmediateStop');
 		this.ImmediateStopAction.registerRunListener(async (args, state) => {
-			this.slide = new Slide(this.homey.settings.get('token'), args.device.getData(), args.device);
+			this.slide = new SlideLocal(args.device.getData(), args.device);
 			return this.slide.immediateStop();
 		});
 
 		this.enableTouchGoAction = this.homey.flow.getActionCard('EnableTouchGo');
 		this.enableTouchGoAction.registerRunListener(async ( args, state ) => {
-			this.slide = new Slide(this.homey.settings.get('token'), args.device.getData(), args.device);
+			this.slide = new SlideLocal(args.device.getData(), args.device);
 			return this.slide.toggleTouchGo(true);
 		});
 
 		this.disableTouchGoAction = this.homey.flow.getActionCard('DisableTouchGo');
 		this.disableTouchGoAction.registerRunListener(async ( args, state ) => {
-			this.slide = new Slide(this.homey.settings.get('token'), args.device.getData(), args.device);
+			this.slide = new SlideLocal(args.device.getData(), args.device);
 			return this.slide.toggleTouchGo(false);
 		});
 
 		this.ReCalibrateAction = this.homey.flow.getActionCard('ReCalibrate');
 		this.ReCalibrateAction.registerRunListener(async (args, state) => {
-			this.slide = new Slide(this.homey.settings.get('token'), args.device.getData(), args.device);
+			this.slide = new SlideLocal(args.device.getData(), args.device);
 			return this.slide.calibrate();
 		});
         
@@ -64,7 +89,7 @@ class SlideDevice extends Homey.Device {
 	async onAdded() {
         this.log('Device added');
 		this.device_data = this.getData();
-		this.slide = new Slide(this.homey.settings.get('token'), this.getData(), this);
+		this.slide = new SlideLocal(this.getData(), this);
 		slide.saveStateToHomey(this.device_data.pos, this.device_data.touch_go, this.device_data.calib_time, true);
     }
 
@@ -98,7 +123,7 @@ class SlideDevice extends Homey.Device {
 		// Clear interval to prevent updates during position changes
 		this.stopPolling();
 
-		this.slide = new Slide(this.homey.settings.get('token'), this.getData(), this);
+		this.slide = new SlideLocal(this.getData(), this);
 		return this.slide.setPosition(value).then(() => {
 			this.startPolling(this.calib_time + 3000); // Start polling the device again after motor is done
 		}).catch(err => {
@@ -145,7 +170,7 @@ class SlideDevice extends Homey.Device {
 	 * Check status and update device
 	 */
 	checkStatus () {
-		this.slide = new Slide(this.homey.settings.get('token'), this.getData(), this);
+		this.slide = new SlideLocal(this.getData(), this);
 		return this.slide.getState();
     }
 }

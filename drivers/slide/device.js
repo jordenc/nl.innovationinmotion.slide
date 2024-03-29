@@ -1,7 +1,7 @@
 'use strict';
 
 const Homey = require('homey');
-let Slide	= require('../../include/slidedevice');
+let Slide	= require('../../include/slidedevice_local');
 
 class SlideDevice extends Homey.Device {
 
@@ -17,7 +17,8 @@ class SlideDevice extends Homey.Device {
 			"windowcoverings_closed",
 			"windowcoverings_set",
 			"curtain_position",
-			"touch_go_state",
+			// Not available in local API
+			// "touch_go_state",
 		];
 		capabilitiesToRegister.forEach(capability => {
 			if (!this.hasCapability(capability)) {
@@ -30,21 +31,22 @@ class SlideDevice extends Homey.Device {
 
 		this.ImmediateStopAction = this.homey.flow.getActionCard('ImmediateStop');
 		this.ImmediateStopAction.registerRunListener(async (args, state) => {
-			this.slide = new Slide(this.homey.settings.get('token'), args.device.getData(), args.device);
+			this.slide = new Slide(args.device.getData(), args.device);
 			return this.slide.immediateStop();
 		});
 
-		this.enableTouchGoAction = this.homey.flow.getActionCard('EnableTouchGo');
-		this.enableTouchGoAction.registerRunListener(async ( args, state ) => {
-			this.slide = new Slide(this.homey.settings.get('token'), args.device.getData(), args.device);
-			return this.slide.toggleTouchGo(true);
-		});
-
-		this.disableTouchGoAction = this.homey.flow.getActionCard('DisableTouchGo');
-		this.disableTouchGoAction.registerRunListener(async ( args, state ) => {
-			this.slide = new Slide(this.homey.settings.get('token'), args.device.getData(), args.device);
-			return this.slide.toggleTouchGo(false);
-		});
+		// Not available in local API:
+		// this.enableTouchGoAction = this.homey.flow.getActionCard('EnableTouchGo');
+		// this.enableTouchGoAction.registerRunListener(async ( args, state ) => {
+		// 	this.slide = new Slide(this.homey.settings.get('token'), args.device.getData(), args.device);
+		// 	return this.slide.toggleTouchGo(true);
+		// });
+		//
+		// this.disableTouchGoAction = this.homey.flow.getActionCard('DisableTouchGo');
+		// this.disableTouchGoAction.registerRunListener(async ( args, state ) => {
+		// 	this.slide = new Slide(this.homey.settings.get('token'), args.device.getData(), args.device);
+		// 	return this.slide.toggleTouchGo(false);
+		// });
 
 		this.ReCalibrateAction = this.homey.flow.getActionCard('ReCalibrate');
 		this.ReCalibrateAction.registerRunListener(async (args, state) => {
@@ -64,7 +66,7 @@ class SlideDevice extends Homey.Device {
 	async onAdded() {
         this.log('Device added');
 		this.device_data = this.getData();
-		this.slide = new Slide(this.homey.settings.get('token'), this.getData(), this);
+		this.slide = new Slide(this.getData(), this);
 		slide.saveStateToHomey(this.device_data.pos, this.device_data.touch_go, this.device_data.calib_time, true);
     }
 
@@ -145,7 +147,7 @@ class SlideDevice extends Homey.Device {
 	 * Check status and update device
 	 */
 	checkStatus () {
-		this.slide = new Slide(this.homey.settings.get('token'), this.getData(), this);
+		this.slide = new Slide(this.getData(), this);
 		return this.slide.getState();
     }
 }
