@@ -16,7 +16,6 @@ class SlideLocalDevice
         this.api = new LocalApi();
         this.device_data = device_data;
         this.homeyDevice = homeyDevice;
-        // console.log('device_data', device_data)
     }
 
     /**
@@ -28,8 +27,8 @@ class SlideLocalDevice
         const self = this;
         return new Promise(function (resolve, reject) {
             self.api.post('http://' + self.device_data.host + '/rpc/Slide.GetInfo').then(body => {
-                self.saveStateToHomey(body.data.pos, body.data.touch_go, body.data.calib_time, false);
-                resolve(body.data);
+                self.saveStateToHomey(body.pos, body.touch_go, body.calib_time, false);
+                resolve(body);
             }).catch(reject);
         });
     }
@@ -114,7 +113,7 @@ class SlideLocalDevice
         return new Promise(function (resolve, reject) {
             self.api.post('http://' + self.device_data.host + '/rpc/Slide.SetPos', {"pos": 1 - value})
                 .then(body => {
-                    if (body.data.response === 'success') {
+                    if (body.response === 'success') {
                         resolve();
                     } else {
                         reject();
