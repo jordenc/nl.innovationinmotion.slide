@@ -147,7 +147,7 @@ class SlideDevice extends Homey.Device {
 						// Catch and handle any errors from this.checkStatus.
 						this.log(err);
 					});
-				}, 30000);
+				}, 5000);
 			}).catch(err => {
 				this.log(err);
 			});
