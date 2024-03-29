@@ -1,0 +1,17 @@
+<p>By default, your Slide is configured to connect to the cloud API. It is possible to set it to allow to connect locally, but the Slide will no longer connect to the cloud API. The official Slide app for your smartphone will not work if your Slide is in local mode.</p>
+
+<p>On the bottom of your Slide, there is are two holes. One of them is the reset button.</p>
+
+<p><img src="slide_local.png" style="max-width: 100%"></p>
+
+<p>Briefly press the reset button twice, with about 0.5 second between the two presses.</p>
+
+<p>If you see the LED (the other hole) rapidly flash five times, you have disabled the Cloud API and enabled the Local API.</p>
+
+<p><i>(If you see the LED slowly flash two times, you have enabled the Cloud API and disabled the Local API)</i></p>
+
+<button type="button" onclick="javascript:Homey.showView('list_devices');">Continue</button>
+
+<script type="application/javascript">
+    Homey.setTitle("Set device to local");
+</script>

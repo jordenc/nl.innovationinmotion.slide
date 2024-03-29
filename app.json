@@ -5,7 +5,7 @@
     "nl": "Slide"
   },
   "sdk": 3,
-  "version": "1.0.8",
+  "version": "1.0.9",
   "compatibility": ">=5.0.0",
   "platforms": [
     "local",
@@ -140,6 +140,63 @@
           "options": {
             "logo": "small.jpg"
           }
+        },
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ]
+    },
+    {
+      "id": "slide_local",
+      "name": {
+        "en": "Slide local API",
+        "nl": "Slide lokale API"
+      },
+      "platforms": [
+        "local"
+      ],
+      "images": {
+        "large": "drivers/slide/assets/images/large.jpg",
+        "small": "drivers/slide/assets/images/small.jpg"
+      },
+      "class": "curtain",
+      "capabilities": [
+        "windowcoverings_closed",
+        "windowcoverings_set",
+        "curtain_position",
+        "touch_go_state"
+      ],
+      "capabilitiesOptions": {
+        "dim": {
+          "title": {
+            "en": "Drag to open/close",
+            "nl": "Verschuif om te openen/sluiten"
+          },
+          "preventInsights": true,
+          "preventTag": true,
+          "uiQuickAction": false
+        },
+        "onoff": {
+          "title": {
+            "en": "Open/close curtain",
+            "nl": "Open/sluit gordijn"
+          }
+        }
+      },
+      "connectivity": [
+        "lan"
+      ],
+      "pair": [
+        {
+          "id": "set_local"
         },
         {
           "id": "list_devices",
