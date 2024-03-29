@@ -5,30 +5,6 @@ let SlideLocal	= require('../../include/slidedevice_local');
 
 class SlideDevice extends Homey.Device {
 
-	// onDiscoveryResult(discoveryResult) {
-	// 	// Return a truthy value here if the discovery result matches your device.
-	// 	this.log("discovery found device: ", discoveryResult.id)
-	// 	return discoveryResult.id === this.getData().id;
-	// }
-	//
-	// async onDiscoveryAvailable(discoveryResult) {
-	// 	// This method will be executed once when the device has been found (onDiscoveryResult returned true)
-	// 	this.log("device became available", discoveryResult.address)
-	// 	this.api = new SlideLocal(discoveryResult.address);
-	// 	// await this.api.connect(); // When this throws, the device will become unavailable.
-	// }
-	//
-	// onDiscoveryAddressChanged(discoveryResult) {
-	// 	// Update your connection details here, reconnect when the device is offline
-	// 	this.api.address = discoveryResult.address;
-	// 	this.api.reconnect().catch(this.error);
-	// }
-	//
-	// onDiscoveryLastSeenChanged(discoveryResult) {
-	// 	// When the device is offline, try to reconnect here
-	// 	this.api.reconnect().catch(this.error);
-	// }
-
 	/**
 	 * This method is called when the Device is inited
 	 */
