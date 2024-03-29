@@ -194,6 +194,7 @@
       "connectivity": [
         "lan"
       ],
+      "discovery": "slide_local",
       "pair": [
         {
           "id": "set_local"
@@ -212,6 +213,27 @@
       ]
     }
   ],
+  "discovery": {
+    "slide_local": {
+      "type": "mdns-sd",
+      "mdns-sd": {
+        "name": "hap",
+        "protocol": "tcp"
+      },
+      "id": "{{name}}",
+      "conditions": [
+        [
+          {
+            "field": "txt.md",
+            "match": {
+              "type": "string",
+              "value": "Slide"
+            }
+          }
+        ]
+      ]
+    }
+  },
   "flow": {
     "actions": [
       {
