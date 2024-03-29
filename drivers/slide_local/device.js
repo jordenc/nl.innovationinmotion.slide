@@ -35,17 +35,17 @@ class SlideDevice extends Homey.Device {
 			return this.slide.immediateStop();
 		});
 
-		this.enableTouchGoAction = this.homey.flow.getActionCard('EnableTouchGo');
-		this.enableTouchGoAction.registerRunListener(async ( args, state ) => {
-			this.slide = new SlideLocal(args.device.getData(), args.device);
-			return this.slide.toggleTouchGo(true);
-		});
-
-		this.disableTouchGoAction = this.homey.flow.getActionCard('DisableTouchGo');
-		this.disableTouchGoAction.registerRunListener(async ( args, state ) => {
-			this.slide = new SlideLocal(args.device.getData(), args.device);
-			return this.slide.toggleTouchGo(false);
-		});
+		// this.enableTouchGoAction = this.homey.flow.getActionCard('EnableTouchGo');
+		// this.enableTouchGoAction.registerRunListener(async ( args, state ) => {
+		// 	this.slide = new SlideLocal(args.device.getData(), args.device);
+		// 	return this.slide.toggleTouchGo(true);
+		// });
+		//
+		// this.disableTouchGoAction = this.homey.flow.getActionCard('DisableTouchGo');
+		// this.disableTouchGoAction.registerRunListener(async ( args, state ) => {
+		// 	this.slide = new SlideLocal(args.device.getData(), args.device);
+		// 	return this.slide.toggleTouchGo(false);
+		// });
 
 		this.ReCalibrateAction = this.homey.flow.getActionCard('ReCalibrate');
 		this.ReCalibrateAction.registerRunListener(async (args, state) => {
