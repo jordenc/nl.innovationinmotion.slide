@@ -68,7 +68,7 @@
         "en": "Touch & Go"
       },
       "getable": true,
-      "setable": false,
+      "setable": true,
       "uiComponent": "sensor",
       "icon": "/assets/touch-icon.svg"
     },
@@ -79,7 +79,7 @@
         "nl": "Gordijn positie"
       },
       "getable": true,
-      "setable": false,
+      "setable": true,
       "uiComponent": "sensor",
       "icon": "/assets/percent-icon.svg",
       "units": {
@@ -249,8 +249,7 @@
             "placeholder": {
               "en": "Select slide",
               "nl": "Selecteer slide"
-            },
-            "filter": "driver_id=slide"
+            }
           }
         ]
       },
@@ -285,8 +284,7 @@
             "placeholder": {
               "en": "Select slide",
               "nl": "Selecteer slide"
-            },
-            "filter": "driver_id=slide"
+            }
           }
         ]
       },
@@ -303,8 +301,7 @@
             "placeholder": {
               "en": "Select slide",
               "nl": "Selecteer slide"
-            },
-            "filter": "driver_id=slide"
+            }
           }
         ]
       },

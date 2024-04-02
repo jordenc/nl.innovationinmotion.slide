@@ -28,6 +28,7 @@ class SlideDevice extends Homey.Device {
 
         this.registerCapabilityListener('windowcoverings_set', this.onCapabilitySet.bind(this));
         this.registerCapabilityListener('windowcoverings_closed', this.onCapabilitySet.bind(this));
+        this.registerCapabilityListener('touch_go_state', this.onCapabilitySetTouch.bind(this));
 
 		this.ImmediateStopAction = this.homey.flow.getActionCard('ImmediateStop');
 		this.ImmediateStopAction.registerRunListener(async (args, state) => {
@@ -35,17 +36,17 @@ class SlideDevice extends Homey.Device {
 			return this.slide.immediateStop();
 		});
 
-		// this.enableTouchGoAction = this.homey.flow.getActionCard('EnableTouchGo');
-		// this.enableTouchGoAction.registerRunListener(async ( args, state ) => {
-		// 	this.slide = new SlideLocal(args.device.getData(), args.device);
-		// 	return this.slide.toggleTouchGo(true);
-		// });
-		//
-		// this.disableTouchGoAction = this.homey.flow.getActionCard('DisableTouchGo');
-		// this.disableTouchGoAction.registerRunListener(async ( args, state ) => {
-		// 	this.slide = new SlideLocal(args.device.getData(), args.device);
-		// 	return this.slide.toggleTouchGo(false);
-		// });
+		this.enableTouchGoAction = this.homey.flow.getActionCard('EnableTouchGo');
+		this.enableTouchGoAction.registerRunListener(async ( args, state ) => {
+			this.slide = new SlideLocal(args.device.getData(), args.device);
+			return this.slide.toggleTouchGo(true);
+		});
+
+		this.disableTouchGoAction = this.homey.flow.getActionCard('DisableTouchGo');
+		this.disableTouchGoAction.registerRunListener(async ( args, state ) => {
+			this.slide = new SlideLocal(args.device.getData(), args.device);
+			return this.slide.toggleTouchGo(false);
+		});
 
 		this.ReCalibrateAction = this.homey.flow.getActionCard('ReCalibrate');
 		this.ReCalibrateAction.registerRunListener(async (args, state) => {
@@ -102,6 +103,16 @@ class SlideDevice extends Homey.Device {
 		this.slide = new SlideLocal(this.getData(), this);
 		return this.slide.setPosition(value).then(() => {
 			this.startPolling(this.calib_time + 3000); // Start polling the device again after motor is done
+		}).catch(err => {
+			this.log(err);
+		});
+    }
+
+	async onCapabilitySetTouch (value, opts) {
+
+		this.slide = new SlideLocal(this.getData(), this);
+		return this.slide.setTouchGo(value).then(() => {
+			this.log ("touch go set!")
 		}).catch(err => {
 			this.log(err);
 		});

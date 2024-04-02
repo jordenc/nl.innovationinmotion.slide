@@ -59,7 +59,7 @@ class LocalApi
      * @param callback
      */
     post(apiMethod, requestData, callback) {
-        console.log('localApi {PST} ' +  apiMethod);
+        console.log('localApi {POST} ' +  apiMethod);
 
         const self = this;
         return new Promise(function (resolve, reject) {

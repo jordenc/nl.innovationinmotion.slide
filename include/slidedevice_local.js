@@ -126,6 +126,24 @@ class SlideLocalDevice
         });
     }
 
+    setTouchGo(value) {
+        const self = this;
+        return new Promise(function (resolve, reject) {
+            self.api.post('http://' + self.device_data.host + '/rpc/Slide.SetPos', {"pos": 1 - value})
+                .then(body => {
+                    if (body.response === 'success') {
+                        resolve();
+                    } else {
+                        reject();
+                    }
+                }, message => {
+                    reject(message);
+                }).catch(message => {
+                    reject(message);
+                });
+        });
+    }
+
     /**
      * Set Touch&Go for this specific Slide
      *
