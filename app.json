@@ -5,7 +5,7 @@
     "nl": "Slide"
   },
   "sdk": 3,
-  "version": "1.0.9",
+  "version": "2.0.0",
   "compatibility": ">=5.0.0",
   "platforms": [
     "local",
@@ -242,11 +242,15 @@
           "en": "Stop immediately",
           "nl": "Stop motor direct"
         },
+        "titleFormatted": {
+          "en": "Stop [[device]] immediately",
+          "nl": "Stop motor van [[device]] direct"
+        },
         "args": [
           {
             "name": "device",
             "type": "device",
-            "placeholder": {
+            "title": {
               "en": "Select slide",
               "nl": "Selecteer slide"
             }
@@ -258,6 +262,10 @@
         "title": {
           "en": "Enable Touch & Go",
           "nl": "Activeer Touch & Go"
+        },
+        "titleFormatted": {
+          "en": "Enable Touch & Go on [[device]]",
+          "nl": "Activeer Touch & Go voor [[device]]"
         },
         "args": [
           {
@@ -277,11 +285,15 @@
           "en": "Disable Touch & Go",
           "nl": "Deactiveer Touch & Go"
         },
+        "titleFormatted": {
+          "en": "Disable Touch & Go on [[device]]",
+          "nl": "Deactiveer Touch & Go voor [[device]]"
+        },
         "args": [
           {
             "name": "device",
             "type": "device",
-            "placeholder": {
+            "title": {
               "en": "Select slide",
               "nl": "Selecteer slide"
             }
@@ -294,11 +306,15 @@
           "en": "Trigger a re-calibration",
           "nl": "Start een her-calibratie"
         },
+        "titleFormatted": {
+          "en": "Trigger a re-calibration of [[device]]",
+          "nl": "Start een her-calibratie van [[device]]"
+        },
         "args": [
           {
             "name": "device",
             "type": "device",
-            "placeholder": {
+            "title": {
               "en": "Select slide",
               "nl": "Selecteer slide"
             }

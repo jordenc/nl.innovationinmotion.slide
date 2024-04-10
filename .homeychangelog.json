@@ -16,5 +16,8 @@
   },
   "1.0.9": {
     "en": "Fix polling function on errors"
+  },
+  "2.0.0": {
+    "en": "Support for local API of Slide devices"
   }
 }
