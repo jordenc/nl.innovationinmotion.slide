@@ -5,7 +5,7 @@
     "nl": "Slide"
   },
   "sdk": 3,
-  "version": "2.0.0",
+  "version": "2.0.1",
   "compatibility": ">=5.0.0",
   "platforms": [
     "local",
@@ -25,6 +25,10 @@
       {
         "name": "Ruben te Bogt",
         "email": "info@rubentebogt.nl"
+      },
+      {
+        "name": "Geurt Dijker",
+        "email": "Homey.Apps@dijker.nu"
       }
     ]
   },
