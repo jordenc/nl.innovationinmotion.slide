@@ -59,7 +59,7 @@ class SlideLocalDevice
             "windowcoverings_set": position,
             "curtain_position": position * 100,
             //not available to set in local
-            // "touch_go_state": touch_go,
+            "touch_go_state": touch_go,
         };
         for (const [capabilityName, capabilityValue] of Object.entries(capabilities)) {
             if (this.homeyDevice.getCapabilityValue(capabilityName) !== capabilityValue) {
