@@ -126,10 +126,17 @@ class SlideLocalDevice
         });
     }
 
+    /**
+     * Set Touch&Go for this specific Slide
+     *
+     * @param value
+     * @return {Promise<string>}
+     */
+     // Now Available in local !!!
     setTouchGo(value) {
         const self = this;
         return new Promise(function (resolve, reject) {
-            self.api.post('http://' + self.device_data.host + '/rpc/Slide.SetPos', {"pos": 1 - value})
+            self.api.post('http://' + self.device_data.host + '/rpc/Slide.touchGo', {"touch_go":  value})
                 .then(body => {
                     if (body.response === 'success') {
                         resolve();
@@ -143,34 +150,6 @@ class SlideLocalDevice
                 });
         });
     }
-
-    /**
-     * Set Touch&Go for this specific Slide
-     *
-     * @param value
-     * @return {Promise<string>}
-     */
-    // Not available in local
-    // toggleTouchGo(value) {
-    //     const self = this;
-    //     return new Promise(function (resolve, reject) {
-    //         self.api.patch('slide/' + self.device_data.numid,{"touch_go": value})
-    //             .then(body => {
-    //                 if (body.message === 'Slide was successfully updated. ') {
-    //
-    //                     console.log("toggleTouchGo success: "  + value);
-    //                     self.homeyDevice.setCapabilityValue("touch_go_state", value);
-    //                     resolve();
-    //                 } else {
-    //
-    //                     console.log("toggleTouchGo reject", body);
-    //                     reject();
-    //                 }
-    //             }).catch(message => {
-    //                 reject(message);
-    //             });
-    //     });
-    // }
 }
 
 module.exports = SlideLocalDevice;
