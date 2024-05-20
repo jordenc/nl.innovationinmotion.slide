@@ -22,13 +22,18 @@ class SlideLocalDriver extends Homey.Driver {
 			const devices = Object.values(discoveryResults).map(discoveryResult => {
 
 				this.log('discoveryResult', discoveryResult);
-
+				// Workaround for differenc in returend data from HP23 and older Homeys
+				let  hostFQDN = discoveryResult.host // HP 2023
+				if (!discoveryResult.host.endsWith(".local")) { // HP 2016-2019
+					hostFQDN = discoveryResult.host + ".local"
+				} 
+				this.log('hostFQDN ', discoveryResult.host , hostFQDN);
 				return {
-					name: discoveryResult.txt.name,
+					name: discoveryResult.name,
 					data: {
 						id: discoveryResult.id,
 						ip: discoveryResult.address,
-						host: discoveryResult.host,
+						host: hostFQDN,
 						touch_go: false,
 						pos: 0
 					},
