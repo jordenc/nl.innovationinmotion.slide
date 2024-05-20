@@ -278,8 +278,7 @@
             "placeholder": {
               "en": "Select slide",
               "nl": "Selecteer slide"
-            },
-            "filter": "driver_id=slide"
+            }
           }
         ]
       },
