@@ -5,7 +5,7 @@
     "nl": "Slide"
   },
   "sdk": 3,
-  "version": "2.0.1",
+  "version": "2.0.2",
   "compatibility": ">=5.0.0",
   "platforms": [
     "local",
@@ -275,7 +275,7 @@
           {
             "name": "device",
             "type": "device",
-            "placeholder": {
+            "title": {
               "en": "Select slide",
               "nl": "Selecteer slide"
             }

@@ -19,5 +19,8 @@
   },
   "2.0.0": {
     "en": "Support for local API of Slide devices"
+  },
+  "2.0.2": {
+    "en": "Fixes for Homey Pro 2019 (and earlier) for local devices. Enable touch&go settings for local device"
   }
 }
