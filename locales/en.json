@@ -1,1 +1,8 @@
-{}
+{
+  "device": {
+    "unreachable": "Slide can not be reached on the local network"
+  },
+  "settings": {
+    "invalid_address": "Fill in a valid IP address (for example 192.168.1.56) or leave the field empty"
+  }
+}

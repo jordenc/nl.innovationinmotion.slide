@@ -195,6 +195,21 @@
         "lan"
       ],
       "discovery": "slide_local",
+      "settings": [
+        {
+          "id": "address",
+          "type": "text",
+          "label": {
+            "en": "IP address",
+            "nl": "IP-adres"
+          },
+          "value": "",
+          "hint": {
+            "en": "Leave empty to find the Slide automatically. Fill in an IP address (for example 192.168.1.56) if Homey can not find your Slide.",
+            "nl": "Laat leeg om de Slide automatisch te vinden. Vul een IP-adres in (bijvoorbeeld 192.168.1.56) als Homey je Slide niet kan vinden."
+          }
+        }
+      ],
       "pair": [
         {
           "id": "set_local"

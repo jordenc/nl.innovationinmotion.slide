@@ -61,19 +61,32 @@ class SlideDevice
         };
         for (const [capabilityName, capabilityValue] of Object.entries(capabilities)) {
             if (this.homeyDevice.getCapabilityValue(capabilityName) !== capabilityValue) {
-                this.homeyDevice.setCapabilityValue(capabilityName, capabilityValue);
+                this.setCapability(capabilityName, capabilityValue);
             }
         }
 
         if (freshDevice) {
-            this.homeyDevice.setCapabilityValue("windowcoverings_closed", false);
+            this.setCapability("windowcoverings_closed", false);
         }
         if (position <= 0.1) {
-            this.homeyDevice.setCapabilityValue("windowcoverings_closed", true);
+            this.setCapability("windowcoverings_closed", true);
         }
         if (position >= 0.9) {
-            this.homeyDevice.setCapabilityValue("windowcoverings_closed", false);
+            this.setCapability("windowcoverings_closed", false);
         }
+    }
+
+    /**
+     * Set a capability value, the device can be deleted while a request is still running
+     *
+     * @param name
+     * @param value
+     * @return void
+     */
+    setCapability(name, value) {
+        this.homeyDevice.setCapabilityValue(name, value).catch(err => {
+            this.homeyDevice.log(err);
+        });
     }
 
     /**
@@ -138,7 +151,7 @@ class SlideDevice
                     if (body.message === 'Slide was successfully updated. ') {
                         
                         console.log("toggleTouchGo success: "  + value);
-                        self.homeyDevice.setCapabilityValue("touch_go_state", value);
+                        self.setCapability("touch_go_state", value);
                         resolve();
                     } else {
                         

@@ -31,6 +31,7 @@ class LocalApi
                 method: "GET",
                 headers: self.headers,
                 json: true,
+                timeout: 5000,
             }, function (error, response, body) {
 
                 if (!error && response.statusCode === 200) {
@@ -69,6 +70,7 @@ class LocalApi
                 method: "POST",
                 headers: self.headers,
                 json: true,
+                timeout: 5000,
                 body: requestData
             }, function (error, response, body) {
 

@@ -28,30 +28,6 @@ class SlideDevice extends Homey.Device {
         this.registerCapabilityListener('windowcoverings_set', this.onCapabilitySet.bind(this));
         this.registerCapabilityListener('windowcoverings_closed', this.onCapabilitySet.bind(this));
 
-		this.ImmediateStopAction = this.homey.flow.getActionCard('ImmediateStop');
-		this.ImmediateStopAction.registerRunListener(async (args, state) => {
-			this.slide = new Slide(this.homey.settings.get('token'), args.device.getData(), args.device);
-			return this.slide.immediateStop();
-		});
-
-		this.enableTouchGoAction = this.homey.flow.getActionCard('EnableTouchGo');
-		this.enableTouchGoAction.registerRunListener(async ( args, state ) => {
-			this.slide = new Slide(this.homey.settings.get('token'), args.device.getData(), args.device);
-			return this.slide.toggleTouchGo(true);
-		});
-
-		this.disableTouchGoAction = this.homey.flow.getActionCard('DisableTouchGo');
-		this.disableTouchGoAction.registerRunListener(async ( args, state ) => {
-			this.slide = new Slide(this.homey.settings.get('token'), args.device.getData(), args.device);
-			return this.slide.toggleTouchGo(false);
-		});
-
-		this.ReCalibrateAction = this.homey.flow.getActionCard('ReCalibrate');
-		this.ReCalibrateAction.registerRunListener(async (args, state) => {
-			this.slide = new Slide(this.homey.settings.get('token'), args.device.getData(), args.device);
-			return this.slide.calibrate();
-		});
-        
         //Poll the device every 30 seconds
 		this.startPolling(0);
     }
@@ -65,7 +41,7 @@ class SlideDevice extends Homey.Device {
         this.log('Device added');
 		this.device_data = this.getData();
 		this.slide = new Slide(this.homey.settings.get('token'), this.getData(), this);
-		slide.saveStateToHomey(this.device_data.pos, this.device_data.touch_go, this.device_data.calib_time, true);
+		this.slide.saveStateToHomey(this.device_data.pos, this.device_data.touch_go, this.device_data.calib_time, true);
     }
 
 	/**
@@ -75,8 +51,38 @@ class SlideDevice extends Homey.Device {
 	 */
 	async onDeleted() {
         this.log('Device deleted');
+        this.deleted = true;
         this.stopPolling();
     }
+
+	/**
+	 * This method is called when the app is stopped or restarted
+	 *
+	 * @return void
+	 */
+	async onUninit() {
+        this.stopPolling();
+    }
+
+	/**
+	 * Flow card handlers, called from app.js
+	 *
+	 * @return {Promise<string>}
+	 */
+	immediateStop() {
+		this.slide = new Slide(this.homey.settings.get('token'), this.getData(), this);
+		return this.slide.immediateStop();
+	}
+
+	calibrate() {
+		this.slide = new Slide(this.homey.settings.get('token'), this.getData(), this);
+		return this.slide.calibrate();
+	}
+
+	setTouchGo(value) {
+		this.slide = new Slide(this.homey.settings.get('token'), this.getData(), this);
+		return this.slide.toggleTouchGo(value);
+	}
 
 	/**
 	 * Capability listener for windowcoverings_set and windowcoverings_closed
@@ -99,10 +105,10 @@ class SlideDevice extends Homey.Device {
 		this.stopPolling();
 
 		this.slide = new Slide(this.homey.settings.get('token'), this.getData(), this);
-		return this.slide.setPosition(value).then(() => {
-			this.startPolling(this.calib_time + 3000); // Start polling the device again after motor is done
-		}).catch(err => {
+		return this.slide.setPosition(value).catch(err => {
 			this.log(err);
+		}).then(() => {
+			this.startPolling(this.calib_time + 3000); // Start polling the device again after motor is done
 		});
     }
 
@@ -112,22 +118,21 @@ class SlideDevice extends Homey.Device {
 	 * @param timeout
 	 * @return void
 	 */
-
     startPolling(timeout) {
-		let polling = () => {
-			this.checkStatus().then(() => {
-				this.timer = setInterval(async () => {
-					// Wrap the call to this.checkStatus in an async function and await its resolution.
-					await this.checkStatus().catch(err => {
-						// Catch and handle any errors from this.checkStatus.
-						this.log(err);
-					});
-				}, 30000);
-			}).catch(err => {
+		// Never run more than one poll loop per device
+		this.stopPolling();
+
+		this.pollTimeout = setTimeout(() => {
+			this.pollTimeout = null;
+			this.checkStatus().catch(err => {
 				this.log(err);
 			});
-		};
-		setTimeout(polling, timeout);
+			this.timer = setInterval(() => {
+				this.checkStatus().catch(err => {
+					this.log(err);
+				});
+			}, 30000);
+		}, timeout || 0);
 	}
 
 	/**
@@ -136,15 +141,19 @@ class SlideDevice extends Homey.Device {
 	 * @return void
 	 */
 	stopPolling() {
-		if (this.timer) {
-			clearInterval(this.timer);
-		}
+		clearTimeout(this.pollTimeout);
+		clearInterval(this.timer);
+		this.pollTimeout = null;
+		this.timer = null;
 	}
 
 	/**
 	 * Check status and update device
 	 */
 	checkStatus () {
+		if (this.deleted) {
+			return Promise.resolve();
+		}
 		this.slide = new Slide(this.homey.settings.get('token'), this.getData(), this);
 		return this.slide.getState();
     }

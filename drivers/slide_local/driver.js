@@ -37,6 +37,9 @@ class SlideLocalDriver extends Homey.Driver {
 						touch_go: false,
 						pos: 0
 					},
+					store: {
+						address: discoveryResult.address,
+					},
 				};
 			});
 

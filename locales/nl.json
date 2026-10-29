@@ -1,1 +1,8 @@
-{}
+{
+  "device": {
+    "unreachable": "Slide is niet bereikbaar op het lokale netwerk"
+  },
+  "settings": {
+    "invalid_address": "Vul een geldig IP-adres in (bijvoorbeeld 192.168.1.56) of laat het veld leeg"
+  }
+}

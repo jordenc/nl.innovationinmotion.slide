@@ -4,7 +4,6 @@
   "description": "Control your curtains with Slide by Innovation In Motion (https://innovationinmotion.nl/), using Homey by Athom B.V.",
   "main": "app.js",
   "dependencies": {
-    "homey": "^2.18.0",
     "request": "^2.88.2"
   },
   "scripts": {

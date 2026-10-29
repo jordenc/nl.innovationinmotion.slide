@@ -32,6 +32,23 @@ class App extends Homey.App {
 			this.zone = new SlideZone(this.homey.settings.get('token'), args.zone.id);
 			return this.zone.calibrate();
 		}).registerArgumentAutocompleteListener ("zone", this.zoneAutocompleteListener.bind(this));
+
+		// Device cards are shared by the cloud and local driver, so let the selected device handle them
+		this.homey.flow.getActionCard('ImmediateStop').registerRunListener(async (args, state) => {
+			return args.device.immediateStop();
+		});
+
+		this.homey.flow.getActionCard('EnableTouchGo').registerRunListener(async (args, state) => {
+			return args.device.setTouchGo(true);
+		});
+
+		this.homey.flow.getActionCard('DisableTouchGo').registerRunListener(async (args, state) => {
+			return args.device.setTouchGo(false);
+		});
+
+		this.homey.flow.getActionCard('ReCalibrate').registerRunListener(async (args, state) => {
+			return args.device.calibrate();
+		});
 	}
 
 	/**

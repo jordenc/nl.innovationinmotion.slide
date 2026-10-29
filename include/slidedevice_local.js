@@ -16,6 +16,32 @@ class SlideLocalDevice
         this.api = new LocalApi();
         this.device_data = device_data;
         this.homeyDevice = homeyDevice;
+
+        // Prefer the address from the device settings, then the IP address from mDNS discovery, then
+        // the IP from pairing. Resolving the .local hostname is unreliable on Homey, so that is the last resort
+        this.addresses = [(homeyDevice.getSetting('address') || '').trim(), homeyDevice.getStoreValue('address'), device_data.ip, device_data.host]
+            .filter((address, index, addresses) => address && addresses.indexOf(address) === index);
+    }
+
+    /**
+     * Post to the local API, try the next known address when the Slide can not be reached
+     *
+     * @param path
+     * @param requestData
+     * @return {Promise<string>}
+     */
+    post(path, requestData) {
+        const self = this;
+        const tryAddress = (index) => {
+            return self.api.post('http://' + self.addresses[index] + path, requestData).catch(err => {
+                // Only network errors (ENOTFOUND, ETIMEDOUT, ...) have a code, API errors do not
+                if (err && err.code && index + 1 < self.addresses.length) {
+                    return tryAddress(index + 1);
+                }
+                throw err;
+            });
+        };
+        return tryAddress(0);
     }
 
     /**
@@ -26,7 +52,7 @@ class SlideLocalDevice
     getState() {
         const self = this;
         return new Promise(function (resolve, reject) {
-            self.api.post('http://' + self.device_data.host + '/rpc/Slide.GetInfo').then(body => {
+            self.post('/rpc/Slide.GetInfo').then(body => {
                 self.saveStateToHomey(body.pos, body.touch_go, body.calib_time, false);
                 resolve(body);
             }).catch(reject);
@@ -62,19 +88,32 @@ class SlideLocalDevice
         };
         for (const [capabilityName, capabilityValue] of Object.entries(capabilities)) {
             if (this.homeyDevice.getCapabilityValue(capabilityName) !== capabilityValue) {
-                this.homeyDevice.setCapabilityValue(capabilityName, capabilityValue);
+                this.setCapability(capabilityName, capabilityValue);
             }
         }
 
         if (freshDevice) {
-            this.homeyDevice.setCapabilityValue("windowcoverings_closed", false);
+            this.setCapability("windowcoverings_closed", false);
         }
         if (position <= 0.1) {
-            this.homeyDevice.setCapabilityValue("windowcoverings_closed", true);
+            this.setCapability("windowcoverings_closed", true);
         }
         if (position >= 0.9) {
-            this.homeyDevice.setCapabilityValue("windowcoverings_closed", false);
+            this.setCapability("windowcoverings_closed", false);
         }
+    }
+
+    /**
+     * Set a capability value, the device can be deleted while a request is still running
+     *
+     * @param name
+     * @param value
+     * @return void
+     */
+    setCapability(name, value) {
+        this.homeyDevice.setCapabilityValue(name, value).catch(err => {
+            this.homeyDevice.log(err);
+        });
     }
 
     /**
@@ -85,7 +124,7 @@ class SlideLocalDevice
     calibrate() {
         const self = this;
         return new Promise(function (resolve, reject) {
-            self.api.post('http://' + self.device_data.host + '/rpc/Slide.Calibrate', {}).then(resolve, reject);
+            self.post('/rpc/Slide.Calibrate', {}).then(resolve, reject);
         });
     }
 
@@ -97,7 +136,7 @@ class SlideLocalDevice
     immediateStop() {
         const self = this;
         return new Promise(function (resolve, reject) {
-            self.api.post('http://' + self.device_data.host + '/rpc/Slide.Stop', {}).then(resolve, reject);
+            self.post('/rpc/Slide.Stop', {}).then(resolve, reject);
         });
     }
 
@@ -110,7 +149,7 @@ class SlideLocalDevice
     setPosition(value) {
         const self = this;
         return new Promise(function (resolve, reject) {
-            self.api.post('http://' + self.device_data.host + '/rpc/Slide.SetPos', {"pos": 1 - value})
+            self.post('/rpc/Slide.SetPos', {"pos": 1 - value})
                 .then(body => {
                     if (body.response === 'success') {
                         resolve();
@@ -135,7 +174,7 @@ class SlideLocalDevice
     setTouchGo(value) {
         const self = this;
         return new Promise(function (resolve, reject) {
-            self.api.post('http://' + self.device_data.host + '/rpc/Slide.touchGo', {"touch_go":  value})
+            self.post('/rpc/Slide.touchGo', {"touch_go":  value})
                 .then(body => {
                     if (body.response === 'success') {
                         resolve();
